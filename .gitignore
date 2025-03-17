@@ -1,0 +1,56 @@
+# ❌ Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# ❌ Arquivos do Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+*.swo
+
+# ❌ Ambiente Virtual (venv)
+venv/
+env/
+*.venv
+*.env
+
+# ❌ Dependências do Python (recriáveis via requirements.txt)
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# ❌ Configurações de credenciais locais (Django e outros serviços)
+.env
+*.env
+config/settings/local.py
+secrets.json
+
+# ❌ Logs e arquivos de depuração
+*.log
+logs/
+debug.log
+
+# ❌ Banco de Dados SQLite (caso esteja usando)
+db.sqlite3
+*.sqlite3
+
+# ❌ Arquivos de migração criados automaticamente
+**/migrations/**/__pycache__/
+**/migrations/*.pyc
+**/migrations/*.pyo
+
+# ❌ Arquivos de cache e compilação do Django
+staticfiles/
+static/
+media/
+node_modules/
+
+# ❌ Arquivos gerados pelo PyCharm e VSCode
+.idea/
+.vscode/
+*.code-workspace
+
+# ❌ Docker (se estiver usando)
+docker-compose.override.yml
