@@ -9,6 +9,8 @@ Thumbs.db
 __pycache__/
 *.swp
 *.swo
+migrations/
+__init__.py
 
 # ❌ Ambiente Virtual (venv)
 venv/
