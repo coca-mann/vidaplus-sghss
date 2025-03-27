@@ -39,3 +39,7 @@ class Local(models.Model):
 
     def __str__(self):
         return f"{self.nome} - {self.cnpj}"
+    
+    class Meta:
+        verbose_name = 'Local'
+        verbose_name_plural = 'Locais'
