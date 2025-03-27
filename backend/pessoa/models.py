@@ -51,7 +51,8 @@ class Pessoa(models.Model):
         null=True,
         blank=True,
         verbose_name='Usuário do sistema',
-        related_name='pessoas'
+        related_name='pessoas',
+        db_column='idUsuario'
     )
 
     def __str__(self):
@@ -63,13 +64,15 @@ class Administrador(models.Model):
         Pessoa,
         on_delete=models.SET_NULL,
         null=True,
-        verbose_name='Pessoa'
+        verbose_name='Pessoa',
+        db_column='idPessoa'
     )
     idLocal = models.ForeignKey(
         Local,
         on_delete=models.SET_NULL,
         null=True,
-        verbose_name='Local'
+        verbose_name='Local',
+        db_column='idLocal'
     )
     cargo = models.CharField(
         max_length=50,
