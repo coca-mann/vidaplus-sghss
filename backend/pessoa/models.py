@@ -35,7 +35,7 @@ class Pessoa(models.Model):
         verbose_name='Endereço'
     )
     cpf = models.CharField(
-        max_length=14,
+        max_length=11,
         blank=False,
         verbose_name='CPF',
         unique=True
