@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'backend.local',
     'backend.pessoa.apps.PessoaConfig',
-    'backend.paciente',
     'backend.atendimento',
 ]
 
