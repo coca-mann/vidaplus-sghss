@@ -1,3 +1,3 @@
 from django.db import models
-
-# Create your models here.
+from backend.local.models import Local
+from backend.pessoa.models.core import Pessoa
