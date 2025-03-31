@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'backend.pessoa',
     'backend.paciente',
     'backend.profissionalsaude',
+    'backend.atendimento',
 ]
 
 MIDDLEWARE = [
