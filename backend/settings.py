@@ -38,9 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'backend.local',
-    'backend.pessoa',
+    'backend.pessoa.apps.PessoaConfig',
     'backend.paciente',
-    'backend.profissionalsaude',
     'backend.atendimento',
 ]
 
