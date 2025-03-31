@@ -38,7 +38,7 @@ class Paciente(models.Model):
     convenio = models.JSONField(
         null=True,
         blank=True,
-        verbose_name='Ficha médica'
+        verbose_name='Convênio'
     )
 
     def __str__(self):
