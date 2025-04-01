@@ -1,6 +1,5 @@
 from django.db import models
 from backend.local.models import Local
-from backend.pessoa.models.core import Pessoa
 from backend.pessoa.models.paciente import Paciente
 from backend.pessoa.models.saude import ProfissionalSaude
 
