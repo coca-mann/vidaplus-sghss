@@ -47,6 +47,10 @@ class Fornecedor(models.Model):
     )
 
 
+    class Meta:
+        db_table = 'backoffice_compras_fornecedor'
+
+
 class PedidoCompra(models.Model):
     idPedido = models.AutoField(
         primary_key=True,
@@ -92,6 +96,10 @@ class PedidoCompra(models.Model):
     )
 
 
+    class Meta:
+        db_table = 'backoffice_compras_pedidocompra'
+
+
 class ItemPedidoCompra(models.Model):
     idItemPedido = models.AutoField(
         primary_key=True,
@@ -119,3 +127,7 @@ class ItemPedidoCompra(models.Model):
         blank=False,
         verbose_name='Quantidade'
     )
+
+
+    class Meta:
+        db_table = 'backoffice_compras_itempedidocompra'
