@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'backend.local',
     'backend.pessoa.apps.PessoaConfig',
     'backend.atendimento',
+    'backend.backoffice',
 ]
 
 MIDDLEWARE = [
