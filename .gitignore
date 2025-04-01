@@ -55,3 +55,4 @@ node_modules/
 
 # ❌ Docker (se estiver usando)
 docker-compose.override.yml
+.gitconfig
