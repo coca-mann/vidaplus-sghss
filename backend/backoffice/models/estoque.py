@@ -32,6 +32,10 @@ class UnidadeMedida(models.Model):
     )
 
 
+    class Meta:
+        db_table = 'backoffice_estoque_unidademedida'
+
+
 class Suprimento(models.Model):
     idSuprimento = models.AutoField(
         primary_key=True,
@@ -62,6 +66,10 @@ class Suprimento(models.Model):
     )
 
 
+    class Meta:
+        db_table = 'backoffice_estoque_suprimento'
+
+
 class EstoqueSuprimento(models.Model):
     idEstoque = models.AutoField(
         primary_key=True,
@@ -85,6 +93,10 @@ class EstoqueSuprimento(models.Model):
         blank=False,
         verbose_name='Quantidade Atual'
     )
+
+
+    class Meta:
+        db_table = 'backoffice_estoque_estoquesuprimento'
 
 
 class MovimentacaoSuprimento(models.Model):
@@ -123,3 +135,7 @@ class MovimentacaoSuprimento(models.Model):
         null=True,
         verbose_name='Motivo'
     )
+
+
+    class Meta:
+        db_table = 'backoffice_estoque_movimentacaosuprimento'
