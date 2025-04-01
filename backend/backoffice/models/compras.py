@@ -80,6 +80,8 @@ class PedidoCompra(models.Model):
         verbose_name='Status'
     )
     valorTotal = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
         blank=False,
         verbose_name='Valor Total'
     )
@@ -108,6 +110,8 @@ class ItemPedidoCompra(models.Model):
         db_column='idSuprimento'
     )
     valorUnitario = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
         blank=False,
         verbose_name='Valor Unitário'
     )

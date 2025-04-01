@@ -55,6 +55,8 @@ class Suprimento(models.Model):
         db_column='idUnidadeMedida'
     )
     estoqueMinimo = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
         blank=False,
         verbose_name='Estoque mínimo (dec)'
     )
@@ -78,6 +80,8 @@ class EstoqueSuprimento(models.Model):
         db_column='idSuprimento'
     )
     quantidadeAtual = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
         blank=False,
         verbose_name='Quantidade Atual'
     )
