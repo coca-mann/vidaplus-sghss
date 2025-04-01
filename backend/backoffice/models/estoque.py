@@ -2,6 +2,13 @@ from django.db import models
 from backend.local.models import Local
 
 
+TIPO_MOVIMENTACAO = [
+    ('ENTR', 'Entrada'),
+    ('SAID', 'Saída'),
+    ('AJUS', 'Ajuste'),
+]
+
+
 class UnidadeMedida(models.Model):
     idUnidadeMedida = models.AutoField(
         primary_key=True,
@@ -73,4 +80,42 @@ class EstoqueSuprimento(models.Model):
     quantidadeAtual = models.DecimalField(
         blank=False,
         verbose_name='Quantidade Atual'
+    )
+
+
+class MovimentacaoSuprimento(models.Model):
+    idMovimentacao = models.AutoField(
+        primary_key=True,
+        verbose_name='ID Movimentação'
+    )
+    idSuprimento = models.ForeignKey(
+        Suprimento,
+        on_delete=models.PROTECT,
+        verbose_name='Suprimento',
+        db_column='idSuprimento'
+    )
+    idLocal = models.ForeignKey(
+        Local,
+        on_delete=models.PROTECT,
+        verbose_name='Local',
+        db_column='idLocal'
+    )
+    tipoMovimentacao = models.CharField(
+        max_length=10,
+        choices=TIPO_MOVIMENTACAO,
+        blank=False,
+        verbose_name='Tipo de Movimentação'
+    )
+    quantidade = models.IntegerField(
+        blank=False,
+        verbose_name='Quantidade'
+    )
+    dataHora = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Data e Hora da Movimentação'
+    )
+    motivo = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='Motivo'
     )
