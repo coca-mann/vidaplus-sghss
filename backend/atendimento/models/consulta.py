@@ -115,3 +115,7 @@ class AtendimentoConsulta(models.Model):
         blank=False,
         verbose_name='Data e Hora do Atendimento'
     )
+
+
+    class Meta:
+        db_table = 'atendimento_consulta_atendconsulta'

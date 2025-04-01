@@ -34,6 +34,10 @@ class Especialidade(models.Model):
         verbose_name_plural = 'Especialidades'
 
 
+    class Meta:
+        db_table = 'pessoa_profissionalsaude_especialidade'
+
+
 class ProfissionalSaude(models.Model):
     idProfissional = models.AutoField(
         primary_key=True,
@@ -112,3 +116,7 @@ class AgendaProfissionalSaude(models.Model):
     class Meta:
         verbose_name = 'Agenda do Profissional'
         verbose_name_plural = 'Agendas dos Profissionais'
+
+
+    class Meta:
+        db_table = 'pessoa_profissionalsaude_agenda'
