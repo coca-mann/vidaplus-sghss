@@ -41,6 +41,10 @@ class CategoriaFinanceira(models.Model):
     )
 
 
+    class Meta:
+        db_table = 'backoffice_financeiro_categoriafinanceira'
+
+
 class LancamentoFinanceiro(models.Model):
     idLancamento = models.AutoField(
         primary_key=True,
@@ -80,3 +84,7 @@ class LancamentoFinanceiro(models.Model):
         blank=False,
         verbose_name='Forma de Pagamento'
     )
+
+
+    class Meta:
+        db_table = 'backoffice_financeiro_lancamentofinanceiro'
