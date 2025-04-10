@@ -14,6 +14,12 @@ from backend.backoffice.views.financeiro import (
     CategoriaFinanceiraViewSet,
     LancamentoFinanceiroViewSet
 )
+from backend.backoffice.views.gestaohospitalar import (
+    AlaViewSet,
+    LeitoViewSet,
+    LogOcupacaoLeitoViewSet
+)
+
 
 router = DefaultRouter()
 router.register('fornecedor', FornecedorViewSet)
@@ -24,6 +30,9 @@ router.register('suprimento', SuprimentoViewSet)
 router.register('unidademedida', UnidadeMedidaViewSet)
 router.register('categoriafinanceira', CategoriaFinanceiraViewSet)
 router.register('lancamentofinanceiro', LancamentoFinanceiroViewSet)
+router.register('ala', AlaViewSet)
+router.register('leito', LeitoViewSet)
+router.register('logleito', LogOcupacaoLeitoViewSet)
 
 
 urlpatterns = [
