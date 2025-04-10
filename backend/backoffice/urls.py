@@ -5,10 +5,20 @@ from backend.backoffice.views.compras import (
     ItemPedidoViewSet,
     PedidoCompraViewSet
 )
+from backend.backoffice.views.estoque import (
+    EstoqueSuprimentoViewSet,
+    SuprimentoViewSet,
+    UnidadeMedidaViewSet
+)
 
 
 router = DefaultRouter()
 router.register('fornecedor', FornecedorViewSet)
+router.register('itempedidocompra', ItemPedidoViewSet)
+router.register('pedidocompra', PedidoCompraViewSet)
+router.register('estoquesuprimento', EstoqueSuprimentoViewSet)
+router.register('suprimento', SuprimentoViewSet)
+router.register('unidademedida', UnidadeMedidaViewSet)
 
 
 urlpatterns = [
