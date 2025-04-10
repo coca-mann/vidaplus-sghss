@@ -5,11 +5,14 @@ from backend.atendimento.views.consulta import (
     AtendimentoConsultaViewSet
 )
 from backend.atendimento.views.exame import ExameViewSet
+from backend.atendimento.views.prescricao import PrescricaoViewSet
+
 
 router = DefaultRouter()
 router.register('consultas', ConsultaViewSet)
 router.register('atendimentoconsultas', AtendimentoConsultaViewSet)
 router.register('exames', ExameViewSet)
+router.register('prescricao', PrescricaoViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
