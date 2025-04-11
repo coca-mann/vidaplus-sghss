@@ -7,7 +7,10 @@ from backend.pessoa.views.saude import (
     EspecialidadeViewSet,
     ProfissionalSaudeViewSet
 )
-from backend.pessoa.views.djangouser import UserRegistrationViewSet
+from backend.pessoa.views.djangouser import (
+    UserRegistrationViewSet,
+    UserProfileViewSet
+)
 
 
 router = DefaultRouter()
@@ -18,6 +21,7 @@ router.register('agendaprofsaude', AgendaProfissionalSaudeViewSet)
 router.register('especialidadeprofsaude', EspecialidadeViewSet)
 router.register('profissionalsaude', ProfissionalSaudeViewSet)
 router.register('auth/register', UserRegistrationViewSet)
+router.register('auth/profile', UserProfileViewSet, basename='userprofile')
 
 urlpatterns = [
     path('', include(router.urls)),

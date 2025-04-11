@@ -18,3 +18,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+
+
+class UserProfileViewSet(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = User
+        fields = '__all__'
