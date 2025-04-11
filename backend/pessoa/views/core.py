@@ -12,6 +12,9 @@ class AdministradorViewSet(ModelViewSet):
 
 
 class PessoaViewSet(ModelViewSet):
-    queryset = Pessoa.objects.all()
     serializer_class = PessoaSerializer
     permission_classes = [IsAdministradorWithPermission]
+
+
+    def get_queryset(self):
+        return Pessoa.objects.filter(usuario=self.request.user)
