@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'backend.pessoa.apps.PessoaConfig',
     'backend.atendimento',
     'backend.backoffice',
+    'backend.auditoria',
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_spectacular',
