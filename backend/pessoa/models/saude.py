@@ -1,4 +1,5 @@
 from django.db import models
+from auditlog.registry import auditlog
 from backend.local.models import Local
 
 
@@ -138,3 +139,8 @@ class AgendaProfissionalSaude(models.Model):
 
     class Meta:
         db_table = 'pessoa_profissionalsaude_agenda'
+
+
+auditlog.register(Especialidade)
+auditlog.register(ProfissionalSaude)
+auditlog.register(AgendaProfissionalSaude)

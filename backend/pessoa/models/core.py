@@ -1,4 +1,5 @@
 from django.db import models
+from auditlog.registry import auditlog
 from backend.local.models import Local
 
 
@@ -58,3 +59,6 @@ class Administrador(models.Model):
     class Meta:
         verbose_name = 'Administrador'
         verbose_name_plural = 'Administradores'
+
+
+auditlog.register(Administrador)

@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -33,3 +34,6 @@ class ConsentimentoLGPD(models.Model):
         choices=STATUS_CONSENTIMENTO,
         verbose_name='Status'
     )
+
+
+auditlog.register(ConsentimentoLGPD)

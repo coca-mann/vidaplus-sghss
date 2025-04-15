@@ -1,4 +1,5 @@
 from django.db import models
+from auditlog.registry import auditlog
 from backend.local.models import Local
 
 
@@ -64,8 +65,10 @@ class Paciente(models.Model):
     )
 
     def __str__(self):
-        return f"{self.idPessoa.nome}"
+        return f"{self.nome}"
     
     class Meta:
         verbose_name = 'Paciente'
         verbose_name_plural = 'Pacientes'
+
+auditlog.register(Paciente)

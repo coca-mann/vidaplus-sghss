@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.db import models
 from backend.local.models import Local
 from backend.pessoa.models.paciente import Paciente
@@ -59,3 +60,6 @@ class Prescricao(models.Model):
         blank=True,
         verbose_name='Assinatura Digital'
     )
+
+
+auditlog.register(Prescricao)
