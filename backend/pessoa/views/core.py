@@ -1,20 +1,10 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from backend.pessoa.permissions.pessoa import IsAdministradorWithPermission
-from backend.pessoa.models.core import Administrador, Pessoa
-from backend.pessoa.serializers.core import AdministradorSerializer, PessoaSerializer
+from backend.pessoa.models.core import Administrador
+from backend.pessoa.serializers.core import AdministradorSerializer
 
 
 class AdministradorViewSet(ModelViewSet):
     queryset = Administrador.objects.all()
     serializer_class = AdministradorSerializer
-    permission_classes = [IsAdministradorWithPermission]
-
-
-class PessoaViewSet(ModelViewSet):
-    serializer_class = PessoaSerializer
-    permission_classes = [IsAdministradorWithPermission]
-
-
-    def get_queryset(self):
-        return Pessoa.objects.filter(usuario=self.request.user)
+    permission_classes = [IsAuthenticated]

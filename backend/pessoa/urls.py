@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from backend.pessoa.views.core import AdministradorViewSet, PessoaViewSet
+from backend.pessoa.views.core import AdministradorViewSet
 from backend.pessoa.views.paciente import PacienteViewSet
 from backend.pessoa.views.saude import (
     AgendaProfissionalSaudeViewSet,
@@ -15,7 +15,6 @@ from backend.pessoa.views.djangouser import (
 
 router = DefaultRouter()
 router.register('administrador', AdministradorViewSet)
-router.register('pessoa', PessoaViewSet, basename='pessoa')
 router.register('paciente', PacienteViewSet)
 router.register('agendaprofsaude', AgendaProfissionalSaudeViewSet)
 router.register('especialidadeprofsaude', EspecialidadeViewSet)

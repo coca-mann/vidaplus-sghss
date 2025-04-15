@@ -1,6 +1,5 @@
 from django.db import models
 from backend.local.models import Local
-from backend.pessoa.models.core import Pessoa
 
 
 STATUS_DISPONIBILIDADE = [
@@ -43,17 +42,36 @@ class ProfissionalSaude(models.Model):
         primary_key=True,
         verbose_name='ID Profissional'
     )
-    idPessoa = models.ForeignKey(
-        Pessoa,
-        on_delete=models.PROTECT,
-        verbose_name='Pessoa',
-        db_column='idPessoa'
-    )
     idLocal = models.ForeignKey(
         Local,
         on_delete=models.PROTECT,
         verbose_name='Local',
         db_column='idLocal'
+    )
+    nome = models.CharField(
+        max_length=255,
+        blank=False,
+        verbose_name='Nome do Paciente'
+    )
+    cpf = models.CharField(
+        max_length=11,
+        blank=False,
+        verbose_name='CPF'
+    )
+    telefone = models.CharField(
+        max_length=14,
+        blank=False,
+        verbose_name='Telefone'
+    )
+    endereco = models.CharField(
+        max_length=500,
+        blank=False,
+        verbose_name='Endereço'
+    )
+    email = models.EmailField(
+        blank=True,
+        null=True,
+        verbose_name='E-mail'
     )
     registroProfissional = models.CharField(
         max_length=30,
