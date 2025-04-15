@@ -8,38 +8,6 @@ STATUS_CONSENTIMENTO = [
 ]
 
 
-class AuditoriaSistema(models.Model):
-    idAuditoria = models.AutoField(
-        primary_key=True,
-        verbose_name='ID Auditoria'
-    )
-    idUsuario = models.ForeignKey(
-        User,
-        on_delete=models.PROTECT,
-        verbose_name='Usuário',
-        db_column='idUsuario'
-    )
-    acaoRealizada = models.CharField(
-        max_length=500,
-        blank=False,
-        verbose_name='Ação realizada'
-    )
-    dataHora = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Data e hora'
-    )
-    ipOrigem = models.CharField(
-        max_length=50,
-        blank=False,
-        verbose_name='Endereço IP'
-    )
-    detalhes = models.TextField(
-        blank=True,
-        null=True,
-        verbose_name='Detalhes'
-    )
-
-
 class ConsentimentoLGPD(models.Model):
     idConsentimento = models.AutoField(
         primary_key=True,
