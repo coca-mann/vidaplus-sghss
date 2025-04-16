@@ -1,22 +1,17 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from backend.atendimento.models.consulta import (
-    Consulta,
-    AtendimentoConsulta
-)
-from backend.atendimento.serializers.consulta import (
-    ConsultaSerializer,
-    AtendimentoConsultaSerializer
-)
+from backend.atendimento.models.consulta import (Consulta)
+from backend.atendimento.serializers.consulta import (ConsultaSerializer)
 
-
+'''
+CONSULTA
+- Somente profissionais com realiza_consulta = True podem criar atendimentos
+- Permitir atualizar informações sem perder dados
+- Criar campos em medicamentosPrescritos: nome, dosagem, intervalo
+- Criar campos em examesSolicitados: nome, 
+'''
 class ConsultaViewSet(ModelViewSet):
     queryset = Consulta.objects.all()
     serializer_class = ConsultaSerializer
     permission_classes = [IsAuthenticated]
 
-
-class AtendimentoConsultaViewSet(ModelViewSet):
-    queryset = AtendimentoConsulta.objects.all()
-    serializer_class = AtendimentoConsultaSerializer
-    permission_classes = [IsAuthenticated]
