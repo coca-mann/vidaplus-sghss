@@ -26,6 +26,10 @@ class Especialidade(models.Model):
         null=True,
         verbose_name='Descrição'
     )
+    realiza_consulta = models.BooleanField(
+        default=False,
+        verbose_name='Realiza consultas'
+    )
 
     def __str__(self):
         return self.nome
