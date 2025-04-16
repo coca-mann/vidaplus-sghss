@@ -1,6 +1,7 @@
 from django.db import models
 from auditlog.registry import auditlog
 from backend.local.models import Local
+from django.contrib.auth.models import User
 
 
 class Paciente(models.Model):
@@ -62,6 +63,13 @@ class Paciente(models.Model):
         null=True,
         blank=True,
         verbose_name='Convênio'
+    )
+    idUsuario = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        verbose_name='Usuário',
+        null=True,
+        blank=True
     )
 
     def __str__(self):
