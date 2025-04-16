@@ -23,7 +23,7 @@ class EspecialidadeSerializer(serializers.ModelSerializer):
 
 
 class ProfissionalSaudeSerializer(serializers.ModelSerializer):
-
+    especialidades = EspecialidadeSerializer(many=True, read_only=True)
 
     class Meta:
         model = ProfissionalSaude

@@ -25,6 +25,8 @@ class EspecialidadeViewSet(ModelViewSet):
 
 
 class ProfissionalSaudeViewSet(ModelViewSet):
-    queryset = ProfissionalSaude.objects.all()
     serializer_class = ProfissionalSaudeSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return ProfissionalSaude.objects.filter(idUsuario__username=self.request.user)

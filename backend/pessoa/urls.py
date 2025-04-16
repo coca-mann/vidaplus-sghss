@@ -18,7 +18,7 @@ router.register('administrador', AdministradorViewSet)
 router.register('paciente', PacienteViewSet, basename='paciente')
 router.register('agendaprofsaude', AgendaProfissionalSaudeViewSet)
 router.register('especialidadeprofsaude', EspecialidadeViewSet)
-router.register('profissionalsaude', ProfissionalSaudeViewSet)
+router.register('profissionalsaude', ProfissionalSaudeViewSet, basename='profissional-saude')
 router.register('auth/register', UserRegistrationViewSet)
 router.register('auth/profile', UserProfileViewSet, basename='userprofile')
 
