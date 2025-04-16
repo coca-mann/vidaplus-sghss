@@ -1,35 +1,11 @@
 from rest_framework import serializers
-from drf_spectacular.utils import extend_schema_field
 from backend.pessoa.models.paciente import Paciente
 from django.contrib.auth.models import User
-
-
-class FichaMedicaSerializer(serializers.Serializer):
-    alergias = serializers.CharField(required=False, allow_blank=True)
-    doencasCronicas = serializers.ListField(child=serializers.CharField(), required=False)
-    medicamentosUso = serializers.ListField(child=serializers.CharField(), required=False)
-    cirurgiasAnteriores = serializers.CharField(required=False, allow_blank=True)
-    historicoFamiliar = serializers.CharField(required=False, allow_blank=True)
-    grupoSanguineo = serializers.CharField(required=False, allow_blank=True)
-    possuiDeficiencia = serializers.BooleanField(required=False)
-    tipoDeficiencia = serializers.CharField(required=False, allow_blank=True)
-    observacoes = serializers.CharField(required=False, allow_blank=True)
 
 
 class PacienteSerializer(serializers.ModelSerializer):
     fichaMedica = serializers.JSONField(required=False)
     convenio = serializers.JSONField(required=False)
-
-
-    @extend_schema_field(FichaMedicaSerializer)
-    def get_fichaMedica(self, obj):
-        return obj.fichaMedica
-
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep['fichaMedica'] = self.get_fichaMedica(instance)
-        return rep
 
 
     def validate_fichaMedica(self, value):
