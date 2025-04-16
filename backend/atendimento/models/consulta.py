@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.db import models
 from backend.local.models import Local
 from backend.pessoa.models.paciente import Paciente
@@ -119,3 +120,7 @@ class AtendimentoConsulta(models.Model):
 
     class Meta:
         db_table = 'atendimento_consulta_atendconsulta'
+
+
+auditlog.register(Consulta)
+auditlog.register(AtendimentoConsulta)

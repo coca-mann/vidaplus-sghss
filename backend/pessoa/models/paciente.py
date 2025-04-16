@@ -1,6 +1,7 @@
 from django.db import models
+from auditlog.registry import auditlog
 from backend.local.models import Local
-from backend.pessoa.models.core import Pessoa
+from django.contrib.auth.models import User
 
 
 class Paciente(models.Model):
@@ -8,17 +9,40 @@ class Paciente(models.Model):
         primary_key=True,
         verbose_name='ID Paciente'
     )
-    idPessoa = models.ForeignKey(
-        Pessoa,
-        on_delete=models.PROTECT,
-        verbose_name='Pessoa',
-        db_column='idPessoa'
-    )
     idLocal = models.ForeignKey(
         Local,
         on_delete=models.PROTECT,
         verbose_name='Local',
         db_column='idLocal'
+    )
+    nome = models.CharField(
+        max_length=255,
+        blank=False,
+        verbose_name='Nome do Paciente'
+    )
+    cpf = models.CharField(
+        max_length=11,
+        blank=False,
+        verbose_name='CPF'
+    )
+    dataNascimento = models.DateField(
+        blank=False,
+        verbose_name='Data de Nascimento'
+    )
+    telefone = models.CharField(
+        max_length=14,
+        blank=False,
+        verbose_name='Telefone'
+    )
+    endereco = models.CharField(
+        max_length=500,
+        blank=False,
+        verbose_name='Endereço'
+    )
+    email = models.EmailField(
+        blank=True,
+        null=True,
+        verbose_name='E-mail'
     )
     nomeContato = models.CharField(
         max_length=255,
@@ -40,10 +64,19 @@ class Paciente(models.Model):
         blank=True,
         verbose_name='Convênio'
     )
+    idUsuario = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        verbose_name='Usuário',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
-        return f"{self.idPessoa.nome}"
+        return f"{self.nome}"
     
     class Meta:
         verbose_name = 'Paciente'
         verbose_name_plural = 'Pacientes'
+
+auditlog.register(Paciente)

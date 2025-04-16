@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.db import models
 from backend.local.models import Local
 from .estoque import Suprimento
@@ -131,3 +132,8 @@ class ItemPedidoCompra(models.Model):
 
     class Meta:
         db_table = 'backoffice_compras_itempedidocompra'
+
+
+auditlog.register(Fornecedor)
+auditlog.register(PedidoCompra)
+auditlog.register(ItemPedidoCompra)

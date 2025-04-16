@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from backend.pessoa.views.core import AdministradorViewSet, PessoaViewSet
+from backend.pessoa.views.core import AdministradorViewSet
 from backend.pessoa.views.paciente import PacienteViewSet
 from backend.pessoa.views.saude import (
     AgendaProfissionalSaudeViewSet,
@@ -15,11 +15,10 @@ from backend.pessoa.views.djangouser import (
 
 router = DefaultRouter()
 router.register('administrador', AdministradorViewSet)
-router.register('pessoa', PessoaViewSet)
-router.register('paciente', PacienteViewSet)
-router.register('agendaprofsaude', AgendaProfissionalSaudeViewSet)
+router.register('paciente', PacienteViewSet, basename='paciente')
+router.register('agendaprofsaude', AgendaProfissionalSaudeViewSet, basename='agenda-profissional-saude')
 router.register('especialidadeprofsaude', EspecialidadeViewSet)
-router.register('profissionalsaude', ProfissionalSaudeViewSet)
+router.register('profissionalsaude', ProfissionalSaudeViewSet, basename='profissional-saude')
 router.register('auth/register', UserRegistrationViewSet)
 router.register('auth/profile', UserProfileViewSet, basename='userprofile')
 

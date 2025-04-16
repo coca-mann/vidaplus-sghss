@@ -1,6 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+from auditlog.registry import auditlog
 from backend.local.models import Local
-from backend.pessoa.models.core import Pessoa
 
 
 STATUS_DISPONIBILIDADE = [
@@ -25,6 +26,10 @@ class Especialidade(models.Model):
         null=True,
         verbose_name='Descrição'
     )
+    realiza_consulta = models.BooleanField(
+        default=False,
+        verbose_name='Realiza consultas'
+    )
 
     def __str__(self):
         return self.nome
@@ -43,17 +48,36 @@ class ProfissionalSaude(models.Model):
         primary_key=True,
         verbose_name='ID Profissional'
     )
-    idPessoa = models.ForeignKey(
-        Pessoa,
-        on_delete=models.PROTECT,
-        verbose_name='Pessoa',
-        db_column='idPessoa'
-    )
     idLocal = models.ForeignKey(
         Local,
         on_delete=models.PROTECT,
         verbose_name='Local',
         db_column='idLocal'
+    )
+    nome = models.CharField(
+        max_length=255,
+        blank=False,
+        verbose_name='Nome do Paciente'
+    )
+    cpf = models.CharField(
+        max_length=11,
+        blank=False,
+        verbose_name='CPF'
+    )
+    telefone = models.CharField(
+        max_length=14,
+        blank=False,
+        verbose_name='Telefone'
+    )
+    endereco = models.CharField(
+        max_length=500,
+        blank=False,
+        verbose_name='Endereço'
+    )
+    email = models.EmailField(
+        blank=True,
+        null=True,
+        verbose_name='E-mail'
     )
     registroProfissional = models.CharField(
         max_length=30,
@@ -65,9 +89,17 @@ class ProfissionalSaude(models.Model):
         related_name='profissionais',
         verbose_name='Especialidades'
     )
+    idUsuario = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        verbose_name='Usuário',
+        null=True,
+        blank=True,
+        db_column='idUsuario'
+    )
 
     def __str__(self):
-        return f"{self.idPessoa.nome}"
+        return f"{self.nome}"
     
     class Meta:
         verbose_name = 'Profissional de Saude'
@@ -111,7 +143,7 @@ class AgendaProfissionalSaude(models.Model):
     )
 
     def __str__(self):
-        return f"{self.idProfissional.idPessoa.nome} - {self.dataHoraInicio}"
+        return f"{self.idProfissional.nome} - {self.dataHoraInicio} até {self.dataHoraFim}"
     
     class Meta:
         verbose_name = 'Agenda do Profissional'
@@ -120,3 +152,8 @@ class AgendaProfissionalSaude(models.Model):
 
     class Meta:
         db_table = 'pessoa_profissionalsaude_agenda'
+
+
+auditlog.register(Especialidade)
+auditlog.register(ProfissionalSaude)
+auditlog.register(AgendaProfissionalSaude)

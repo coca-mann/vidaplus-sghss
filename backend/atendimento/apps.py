@@ -7,4 +7,4 @@ class AtendimentoConfig(AppConfig):
     verbose_name = 'Atendimento'
 
     def ready(self):
-        from .admin.consulta import ConsultaAdmin
+        import backend.atendimento.models

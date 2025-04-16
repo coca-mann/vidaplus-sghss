@@ -1,5 +1,3 @@
-# backend/pessoa/apps.py
-
 from django.apps import AppConfig
 
 class PessoaConfig(AppConfig):
@@ -8,6 +6,5 @@ class PessoaConfig(AppConfig):
     verbose_name = 'Pessoa'
 
     def ready(self):
-        from .admin import core_admin, saude_admin, paciente_admin
-        if hasattr(core_admin, 'register_custom_user_admin'):
-            core_admin.register_custom_user_admin()
+        import backend.pessoa.models
+        import backend.pessoa.signals

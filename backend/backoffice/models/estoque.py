@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.db import models
 from backend.local.models import Local
 
@@ -139,3 +140,9 @@ class MovimentacaoSuprimento(models.Model):
 
     class Meta:
         db_table = 'backoffice_estoque_movimentacaosuprimento'
+
+
+auditlog.register(UnidadeMedida)
+auditlog.register(Suprimento)
+auditlog.register(EstoqueSuprimento)
+auditlog.register(MovimentacaoSuprimento)

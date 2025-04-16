@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.db import models
 from backend.local.models import Local
 from backend.backoffice.models.compras import Fornecedor
@@ -88,3 +89,7 @@ class LancamentoFinanceiro(models.Model):
 
     class Meta:
         db_table = 'backoffice_financeiro_lancamentofinanceiro'
+
+
+auditlog.register(CategoriaFinanceira)
+auditlog.register(LancamentoFinanceiro)

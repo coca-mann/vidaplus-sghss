@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.db import models
 
 TIPO_LOCAL = [
@@ -43,3 +44,6 @@ class Local(models.Model):
     class Meta:
         verbose_name = 'Local'
         verbose_name_plural = 'Locais'
+
+
+auditlog.register(Local)

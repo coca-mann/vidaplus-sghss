@@ -30,8 +30,12 @@ INSTALLED_APPS = [
     'backend.pessoa.apps.PessoaConfig',
     'backend.atendimento',
     'backend.backoffice',
+    'backend.auditoria',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_spectacular',
+    'django_filters',
+    'auditlog',
 ]
 
 MIDDLEWARE = [
@@ -42,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'auditlog.middleware.AuditlogMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -120,10 +125,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS' : 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
 }
+
+AUDITLOG_INCLUDE_ALL_MODELS = False
+AUDITLOG_GET_REMOTE_ADDR = 'auditlog.middleware._get_remote_addr'

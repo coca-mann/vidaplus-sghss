@@ -5,6 +5,8 @@ from backend.pessoa.serializers.paciente import PacienteSerializer
 
 
 class PacienteViewSet(ModelViewSet):
-    queryset = Paciente.objects.all()
     serializer_class = PacienteSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Paciente.objects.filter(idUsuario=self.request.user)
