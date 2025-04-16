@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field
 from backend.pessoa.models.paciente import Paciente
+from django.contrib.auth.models import User
 
 
 class FichaMedicaSerializer(serializers.Serializer):
@@ -70,6 +71,12 @@ class PacienteSerializer(serializers.ModelSerializer):
             dados_enviados = self.initial_data.get('fichaMedica', {})
             validated_data['fichaMedica'] = self.validate_fichaMedica(dados_enviados)
         return super().update(instance, validated_data)
+    
+    def validate(self, data):
+        cpf = data.get('cpf')
+        if User.objects.filter(username=cpf).exists():
+            raise serializers.ValidationError('Um usuário com este CPF já existe!')
+        return data
 
 
     class Meta:
