@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from auditlog.registry import auditlog
 from backend.local.models import Local
 
@@ -84,9 +85,17 @@ class ProfissionalSaude(models.Model):
         related_name='profissionais',
         verbose_name='Especialidades'
     )
+    idUsuario = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        verbose_name='Usuário',
+        null=True,
+        blank=True,
+        db_column='idUsuario'
+    )
 
     def __str__(self):
-        return f"{self.idPessoa.nome}"
+        return f"{self.nome}"
     
     class Meta:
         verbose_name = 'Profissional de Saude'
@@ -130,7 +139,7 @@ class AgendaProfissionalSaude(models.Model):
     )
 
     def __str__(self):
-        return f"{self.idProfissional.idPessoa.nome} - {self.dataHoraInicio}"
+        return f"{self.idProfissional.nome} - {self.dataHoraInicio}"
     
     class Meta:
         verbose_name = 'Agenda do Profissional'
