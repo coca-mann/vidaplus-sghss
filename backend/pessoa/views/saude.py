@@ -1,5 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from django_filters import rest_framework as filters
 from backend.pessoa.models.saude import (
     AgendaProfissionalSaude,
@@ -43,3 +45,23 @@ class ProfissionalSaudeViewSet(ModelViewSet):
 
     def get_queryset(self):
         return ProfissionalSaude.objects.filter(idUsuario__username=self.request.user)
+    
+    @action(detail=True, methods=['post'])
+    def add_especialidades(self, request, pk=None):
+        profissional = self.get_object()
+        especialidades_ids = request.data.get('especialidades', [])
+
+        especialidades = Especialidade.objects.filter(idEspecialidade__in=especialidades_ids)
+        profissional.especialidades.add(*especialidades)
+
+        return Response(ProfissionalSaudeSerializer(profissional).data)
+    
+    @action(detail=True, methods=['post'])
+    def remove_especialidades(self, request, pk=None):
+        profissional = self.get_object()
+        especialidades_ids = request.data.get('especialidades', [])
+
+        especialidades = Especialidade.objects.filter(idEspecialidade__in=especialidades_ids)
+        profissional.especialidades.remove(*especialidades)
+
+        return Response(ProfissionalSaudeSerializer(profissional).data)

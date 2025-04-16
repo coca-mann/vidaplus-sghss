@@ -31,7 +31,7 @@ class EspecialidadeSerializer(serializers.ModelSerializer):
 
 '''
 PROFISSIONAL SAUDE
-- Atualizar lista de especialidades, sem apagar os demais dados do profissional 
+- Atualizar lista de especialidades, sem apagar os demais dados do profissional DONE
 '''
 class ProfissionalSaudeSerializer(serializers.ModelSerializer):
     especialidades = EspecialidadeSerializer(many=True, read_only=True)
