@@ -143,7 +143,7 @@ class AgendaProfissionalSaude(models.Model):
     )
 
     def __str__(self):
-        return f"{self.idProfissional.nome} - {self.dataHoraInicio}"
+        return f"{self.idProfissional.nome} - {self.dataHoraInicio} até {self.dataHoraFim}"
     
     class Meta:
         verbose_name = 'Agenda do Profissional'
