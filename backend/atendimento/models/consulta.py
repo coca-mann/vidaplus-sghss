@@ -42,6 +42,14 @@ class Consulta(models.Model):
         verbose_name='Médico',
         db_column='idProfissional'
     )
+    idProntuario = models.ForeignKey(
+        Prontuario,
+        on_delete=models.PROTECT,
+        verbose_name='Prontuário',
+        db_column='idProntuario',
+        null=True,
+        blank=True
+    )
     dataHoraConsulta = models.DateTimeField(
         blank=False,
         verbose_name='Data e Hora'
@@ -68,12 +76,6 @@ class Consulta(models.Model):
         verbose_name='Link Teleconsulta',
         blank=True,
         null=True
-    )
-    idProntuario = models.ForeignKey(
-        Prontuario,
-        on_delete=models.PROTECT,
-        verbose_name='Prontuário',
-        db_column='idProntuario'
     )
     sintomas = models.TextField(
         blank=False,
