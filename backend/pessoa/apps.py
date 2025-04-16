@@ -7,3 +7,4 @@ class PessoaConfig(AppConfig):
 
     def ready(self):
         import backend.pessoa.models
+        import backend.pessoa.signals
