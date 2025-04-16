@@ -8,7 +8,7 @@ from backend.pessoa.models.saude import (
 '''
 AGENDA
 - Profissionais saude adicionam horários disponíveis e indisponíveis
-- Pacientes apenas consultam horários DISPONÍVEIS, não podem criar horários
+- Pacientes apenas consultam horários, não podem criar horários
 - Pacientes buscam profissionais pelo nome via parametro
 '''
 class AgendaProfissionalSaudeSerializer(serializers.ModelSerializer):

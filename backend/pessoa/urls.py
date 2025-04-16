@@ -16,7 +16,7 @@ from backend.pessoa.views.djangouser import (
 router = DefaultRouter()
 router.register('administrador', AdministradorViewSet)
 router.register('paciente', PacienteViewSet, basename='paciente')
-router.register('agendaprofsaude', AgendaProfissionalSaudeViewSet)
+router.register('agendaprofsaude', AgendaProfissionalSaudeViewSet, basename='agenda-profissional-saude')
 router.register('especialidadeprofsaude', EspecialidadeViewSet)
 router.register('profissionalsaude', ProfissionalSaudeViewSet, basename='profissional-saude')
 router.register('auth/register', UserRegistrationViewSet)
