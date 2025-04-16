@@ -11,6 +11,7 @@ from backend.pessoa.serializers.saude import (
     EspecialidadeSerializer,
     ProfissionalSaudeSerializer
 )
+from backend.pessoa.permissions.saude import IsAdminOrReadOnly
 
 
 class AgendaProfissionalSaudeFilter(filters.FilterSet):
@@ -33,7 +34,7 @@ class AgendaProfissionalSaudeViewSet(ModelViewSet):
 class EspecialidadeViewSet(ModelViewSet):
     queryset = Especialidade.objects.all()
     serializer_class = EspecialidadeSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 
 class ProfissionalSaudeViewSet(ModelViewSet):

@@ -7,9 +7,9 @@ from backend.pessoa.models.saude import (
 
 '''
 AGENDA
-- Profissionais saude adicionam horários disponíveis e indisponíveis
-- Pacientes apenas consultam horários, não podem criar horários
-- Pacientes buscam profissionais pelo nome via parametro
+- Profissionais saude adicionam horários disponíveis e indisponíveis DONE
+- Pacientes apenas consultam horários, não podem criar horários DONE
+- Pacientes buscam profissionais pelo nome via parametro DONE
 '''
 class AgendaProfissionalSaudeSerializer(serializers.ModelSerializer):
 
@@ -20,7 +20,7 @@ class AgendaProfissionalSaudeSerializer(serializers.ModelSerializer):
 
 '''
 ESPECIALIDADES
-- Somente usuários Admin podem criar, editar, excluir especialidades
+- Somente usuários Admin podem criar, editar, excluir especialidades DONE
 '''
 class EspecialidadeSerializer(serializers.ModelSerializer):
 
@@ -31,7 +31,7 @@ class EspecialidadeSerializer(serializers.ModelSerializer):
 
 '''
 PROFISSIONAL SAUDE
-- Atualizar lista de especialidades, sem apagar os demais dados do profissional
+- Atualizar lista de especialidades, sem apagar os demais dados do profissional 
 '''
 class ProfissionalSaudeSerializer(serializers.ModelSerializer):
     especialidades = EspecialidadeSerializer(many=True, read_only=True)
