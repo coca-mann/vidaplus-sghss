@@ -21,7 +21,7 @@ class ConsultaExame(models.Model):
     )
 
     def __str__(self):
-        return f"Consulta: {self.idConsulta} - Exame: {self.idExame}"
+        return f"Consulta: {self.idConsulta.idConsulta} - Exame: {self.idExame.idExame}"
     
     class Meta:
         db_table = 'atendimento_consulta_exame'

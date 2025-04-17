@@ -6,7 +6,10 @@ from rest_framework.response import Response
 from django.db.models import Q
 from datetime import datetime
 from backend.atendimento.models.consulta import Consulta
+from backend.atendimento.models.exame import Exame
+from backend.atendimento.models.consulta_exame import ConsultaExame
 from backend.atendimento.serializers.consulta import ConsultaSerializer
+from backend.atendimento.serializers.exame import ExameSerializer
 from backend.pessoa.models.saude import ProfissionalSaude
 from backend.pessoa.models.paciente import Paciente
 
@@ -238,5 +241,47 @@ class ConsultaViewSet(ModelViewSet):
         consulta = self.get_object()
         consulta.linkTeleconsulta = ""
         consulta.save()
+
+        return Response(self.get_serializer(consulta).data)
+    
+    @action(detail=True, methods=['post'])
+    def add_exame(self, request, pk=None):
+        consulta = self.get_object()
+        
+        if 'tipoExame' not in request.data:
+            raise ValidationError("É necessário informar o tipo de exame.")
+        
+        exame_data = {
+            'idPaciente': consulta.idPaciente,
+            'idProfissionalSolicitante': consulta.idProfissional,
+            'idLocal': consulta.idLocal,
+            'tipoExame': request.data.get('tipoExame'),
+            'detalhesSolicitacao': request.data.get('detalhes', ''),
+            'status': 'SOLI',
+            'resultadoExame': {}
+        }
+
+        exame = Exame.objects.create(**exame_data)
+
+        ConsultaExame.objects.create(idConsulta=consulta, idExame=exame)
+
+        return Response(self.get_serializer(consulta).data)
+    
+    @action(detail=True, methods=['post'])
+    def cancel_exame(self, request, pk=None):
+        consulta = self.get_object()
+        id_exame = request.data.get('idExame')
+
+        if not id_exame:
+            raise ValidationError("É necessário informar o ID do exame em 'idExame'.")
+        
+        try:
+            consulta_exame = ConsultaExame.objects.get(idConsulta=consulta, idExame=id_exame)
+        except ConsultaExame.DoesNotExist:
+            raise ValidationError("Este exame não está vinculado a esta consulta.")
+        
+        exame = consulta_exame.idExame
+        exame.status = 'CANC'
+        exame.save()
 
         return Response(self.get_serializer(consulta).data)
