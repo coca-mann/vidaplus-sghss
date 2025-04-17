@@ -86,7 +86,7 @@ class Consulta(models.Model):
         null=True,
         verbose_name='Diagnóstico'
     )
-    medicamentoPrescritos = models.JSONField(
+    medicamentoPrescrito = models.JSONField(
         blank=True,
         null=True,
         verbose_name='Medicamentos Preescritos'

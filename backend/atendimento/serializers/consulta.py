@@ -17,13 +17,23 @@ class ConsultaSerializer(serializers.ModelSerializer):
         model = Consulta
         fields = '__all__'
         extra_kwargs = {
-            'medicamentosPrescritos': {'required': False},
+            'medicamentoPrescrito': {'required': False},
             'examesSolicitados': {'required': False},
         }
 
-    def validate_medicamentosPrescritos(self, value):
-        if value:
-            for medicamento in value:
-                if not all(key in medicamento for key in ['nome', 'dosagem', 'intervalo']):
-                    raise serializers.ValidationError('Cada medicamento deve conter nome, dosagem e intervalo.')
-        return value
+    def validate(self, data):
+        profissional = data.get('idProfissional')
+        if profissional:
+
+            pode_criar_consulta = False
+            for especialidade in profissional.especialidades.all():
+                if especialidade.realiza_consulta:
+                    pode_criar_consulta = True
+                    break
+                    
+            if not pode_criar_consulta:
+                raise serializers.ValidationError(
+                    "O profissional selecionado não tem permissão para realizar consultas."
+                )
+        
+        return data
