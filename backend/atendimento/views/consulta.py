@@ -220,3 +220,23 @@ class ConsultaViewSet(ModelViewSet):
     def listar_exames(self, request, pk=None):
         consulta = self.get_object()
         return Response(consulta.examesSolicitados or [])
+    
+    @action(detail=True, methods=['post'])
+    def add_telemedicina_link(self, request, pk=None):
+        consulta = self.get_object()
+        link = request.data.get('link')
+
+        if not link:
+            raise ValidationError("Informe um link para telemedicina online.")
+        
+        consulta.linkTeleconsulta = link
+        consulta.save()
+        return Response(self.get_serializer(consulta).data)
+    
+    @action(detail=True, methods=['post'])
+    def remove_telemedicina_link(self, request, pk=None):
+        consulta = self.get_object()
+        consulta.linkTeleconsulta = ""
+        consulta.save()
+
+        return Response(self.get_serializer(consulta).data)
