@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied, ValidationError
@@ -5,11 +6,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
 from datetime import datetime
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from backend.atendimento.models.consulta import Consulta
 from backend.atendimento.models.exame import Exame
 from backend.atendimento.models.consulta_exame import ConsultaExame
 from backend.atendimento.serializers.consulta import ConsultaSerializer
-from backend.atendimento.serializers.exame import ExameSerializer
+from backend.atendimento.serializers.medicamento import MedicamentoSerializer, RemoveMedicamentoSerializer
 from backend.pessoa.models.saude import ProfissionalSaude
 from backend.pessoa.models.paciente import Paciente
 
@@ -122,6 +124,25 @@ class ConsultaViewSet(ModelViewSet):
         serializer = self.get_serializer(consulta)
         return Response(serializer.data)
     
+    @extend_schema(
+        request=MedicamentoSerializer,
+        responses={200: ConsultaSerializer},
+        description="Adiciona um medicamento à consulta",
+        examples=[
+            OpenApiExample(
+                'Exemplo de adição de medicamento',
+                value={
+                    "nome": "Dipirona",
+                    "dosagem": "500mg",
+                    "intervalo": "8 horas",
+                    "duracao": "5 dias",
+                    "observacoes": "Tomar após as refeições"
+                },
+                request_only=True,
+            )
+        ]
+    )
+
     @action(detail=True, methods=['post'])
     def add_medicamento(self, request, pk=None):
         consulta = self.get_object()
@@ -136,9 +157,12 @@ class ConsultaViewSet(ModelViewSet):
             except ProfissionalSaude.DoesNotExist:
                 raise PermissionDenied("Apenas profissionais de saúde podem modificar consultas.")
 
-        if not all(key in medicamento for key in ['nome', 'dosagem', 'intervalo']):
-            raise ValidationError("O medicamento deve conter 'nome', 'dosagem' e 'intervalo'")
-        
+        from backend.atendimento.serializers.medicamento import MedicamentoSerializer
+        serializer = MedicamentoSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         if consulta.medicamentoPrescrito is None:
             consulta.medicamentoPrescrito = []
 
@@ -153,25 +177,66 @@ class ConsultaViewSet(ModelViewSet):
         
         return Response(self.get_serializer(consulta).data)
 
+    @extend_schema(
+        request=RemoveMedicamentoSerializer,
+        responses={200: ConsultaSerializer},
+        description="Remove um medicamento da consulta",
+        examples=[
+            OpenApiExample(
+                'Exemplo de remoção de medicamento',
+                value={
+                    "nome": "Dipirona"
+                },
+                request_only=True,
+            )
+        ]
+    )
+
     @action(detail=True, methods=['post'])
     def remove_medicamento(self, request, pk=None):
         consulta = self.get_object()
-        nome_medicamento = request.data.get('nome')
-
-        if not nome_medicamento:
-            raise ValidationError("É necessário informar o nome do medicamento a ser removido.")
+        
+        user = request.user
+        if not user.is_staff:
+            try:
+                profissional = ProfissionalSaude.objects.get(idUsuario=user)
+                if consulta.idProfissional.idProfissional != profissional.idProfissional:
+                    raise PermissionDenied("Você só pode modificar consultas que você mesmo criou.")
+            except ProfissionalSaude.DoesNotExist:
+                raise PermissionDenied("Apenas profissionais de saúde podem modificar consultas.")
+        
+        from backend.atendimento.serializers.medicamento import RemoveMedicamentoSerializer
+        serializer = RemoveMedicamentoSerializer(data=request.data)
+        
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        nome_medicamento = serializer.validated_data.get('nome')
         
         if consulta.medicamentoPrescrito is None:
             return Response(self.get_serializer(consulta).data)
+        
+        medicamento_encontrado = False
+        for med in consulta.medicamentoPrescrito:
+            if med.get('nome') == nome_medicamento:
+                medicamento_encontrado = True
+                break
+        
+        if not medicamento_encontrado:
+            return Response(
+                {"detail": f"Medicamento '{nome_medicamento}' não encontrado na consulta."},
+                status=status.HTTP_404_NOT_FOUND
+            )
         
         consulta.medicamentoPrescrito = [
             med for med in consulta.medicamentoPrescrito
             if med.get('nome') != nome_medicamento
         ]
-
+        
         consulta.save()
         return Response(self.get_serializer(consulta).data)
-    
+
+
     @action(detail=True, methods=['get'])
     def listar_medicamentos(self, request, pk=None):
         consulta = self.get_object()
