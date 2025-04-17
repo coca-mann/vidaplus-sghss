@@ -3,7 +3,6 @@ from django.db import models
 from backend.local.models import Local
 from backend.pessoa.models.paciente import Paciente
 from backend.pessoa.models.saude import ProfissionalSaude
-from .consulta import Consulta
 
 
 STATUS_EXAME = [
@@ -36,12 +35,6 @@ class Exame (models.Model):
         verbose_name='Profissional Solicitante',
         db_column='idProfissionalSolicitante'
     )
-    idConsulta = models.ForeignKey(
-        Consulta,
-        on_delete=models.PROTECT,
-        verbose_name='Consulta',
-        db_column='idConsulta'
-    )
     tipoExame = models.CharField(
         max_length=255,
         blank=False,
@@ -49,7 +42,13 @@ class Exame (models.Model):
     )
     dataSolicitacao = models.DateTimeField(
         blank=False,
-        verbose_name='Data e Hora de Solicitação'
+        verbose_name='Data e Hora de Solicitação',
+        auto_now_add=True
+    )
+    detalhesSolicitacao = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='Detalhes da solicitação'
     )
     dataRealizacao = models.DateTimeField(
         blank=True,

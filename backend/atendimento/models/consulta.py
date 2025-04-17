@@ -3,7 +3,7 @@ from django.db import models
 from backend.local.models import Local
 from backend.pessoa.models.paciente import Paciente
 from backend.pessoa.models.saude import ProfissionalSaude
-from .prontuario import Prontuario
+from backend.atendimento.models.prontuario import Prontuario
 
 
 STATUS_ATENDIMENTO = [
@@ -90,11 +90,6 @@ class Consulta(models.Model):
         blank=True,
         null=True,
         verbose_name='Medicamentos Preescritos'
-    )
-    examesSolicitados = models.JSONField(
-        blank=True,
-        null=True,
-        verbose_name='Exames Solicitados'
     )
     dataHoraAtendimento = models.DateTimeField(
         blank=False,
