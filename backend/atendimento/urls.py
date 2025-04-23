@@ -8,7 +8,7 @@ from backend.atendimento.views.prontuario import ProntuarioViewSet
 
 router = DefaultRouter()
 router.register(r'consulta', ConsultaViewSet, basename='consulta')
-router.register('exame', ExameViewSet)
+router.register('exame', ExameViewSet, basename='exame')
 router.register('prescricao', PrescricaoViewSet)
 router.register('prontuario', ProntuarioViewSet)
 

@@ -9,6 +9,7 @@ class ExameSerializer(serializers.ModelSerializer):
     local_details = LocalSerializer(source='idLocal', read_only=True)
     paciente_details = PacienteSerializer(source='idPaciente', read_only=True)
     profissional_solicitante_details = ProfissionalSaudeSerializer(source='idProfissional', read_only=True)
+    http_methods_name = ['get']
 
     class Meta:
         model = Exame
