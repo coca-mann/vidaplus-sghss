@@ -2,6 +2,7 @@ from auditlog.registry import auditlog
 from django.db import models
 from backend.local.models import Local
 from backend.pessoa.models.paciente import Paciente
+from backend.pessoa.models.saude import ProfissionalSaude
 
 
 STATUS_LEITO = [
@@ -107,9 +108,25 @@ class LogOcupacaoLeito(models.Model):
         verbose_name='Leito',
         db_column='idLeito'
     )
+    idProfissionalInternacao = models.ForeignKey(
+        ProfissionalSaude,
+        on_delete=models.PROTECT,
+        verbose_name='Profissional de internação',
+        db_column='idProfissionalInternacao',
+        related_name='profissional_internacao'
+    )
     dataHoraEntrada = models.DateTimeField(
         blank=False,
         verbose_name='Data/Hora Entrada'
+    )
+    idProfissionalLiberacao = models.ForeignKey(
+        ProfissionalSaude,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        verbose_name='Profissional de liberação',
+        db_column='idProfissionalLiberacao',
+        related_name='profissional_liberacao'
     )
     dataHoraSaida = models.DateTimeField(
         blank=False,
