@@ -14,3 +14,16 @@ class ExameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exame
         fields = '__all__'
+
+
+class AddExameRequestSerializer(serializers.Serializer):
+    tipoExame = serializers.CharField(
+        required=True, 
+        help_text="Tipo de exame a ser solicitado (obrigatório)"
+    )
+    detalhes = serializers.CharField(
+        required=False, 
+        default='', 
+        help_text="Detalhes adicionais sobre a solicitação do exame"
+    )
+    

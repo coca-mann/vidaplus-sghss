@@ -4,14 +4,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.db.models import Q
 from datetime import datetime
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.utils import extend_schema, OpenApiExample
 from backend.atendimento.models.consulta import Consulta
 from backend.atendimento.models.exame import Exame
 from backend.atendimento.models.consulta_exame import ConsultaExame
-from backend.atendimento.serializers.consulta import ConsultaSerializer
+from backend.atendimento.serializers.consulta import ConsultaSerializer, ConsultaExamesSerializer
 from backend.atendimento.serializers.medicamento import MedicamentoSerializer, RemoveMedicamentoSerializer
+from backend.atendimento.serializers.exame import AddExameRequestSerializer
 from backend.pessoa.models.saude import ProfissionalSaude
 from backend.pessoa.models.paciente import Paciente
 
@@ -92,19 +92,24 @@ class ConsultaViewSet(ModelViewSet):
         
         return Consulta.objects.none()
     
-    @action(detail=False, methods=['get'])
-    def consultas_hoje(self, request):
-        hoje = datetime.now().date()
-        consultas = self.get_queryset().filter(dataHoraConsulta__date=hoje, status='AGEN')
-        serializer = self.get_serializer(consultas, many=True)
-        return Response(serializer.data)
-    
+    @extend_schema(exclude=True)
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+    @extend_schema(
+            description='Listar as consultas pendentes do usuário.',
+            responses={200: ConsultaSerializer},
+    )
     @action(detail=False, methods=['get'])
     def consultas_pendentes(self, request):
         consultas = self.get_queryset().filter(status='AGEN')
         serializer = self.get_serializer(consultas, many=True)
         return Response(serializer.data)
-    
+
+    @extend_schema(
+            description='Cancelar a consulta informada.',
+            responses={Response(status=status.HTTP_204_NO_CONTENT)},
+    )
     @action(detail=True, methods=['post'])
     def cancelar_consulta(self, request, pk=None):
         consulta = self.get_object()
@@ -113,6 +118,10 @@ class ConsultaViewSet(ModelViewSet):
         serializer = self.get_serializer(consulta)
         return Response(serializer.data)
     
+    @extend_schema(
+            description='Marcar a consulta informada como Realizada.',
+            responses={200: ConsultaSerializer},
+    )
     @action(detail=True, methods=['post'])
     def realizar_consulta(self, request, pk=None):
         consulta = self.get_object()
@@ -231,18 +240,39 @@ class ConsultaViewSet(ModelViewSet):
         
         consulta.save()
         return Response(self.get_serializer(consulta).data)
-
-
+    
+    @extend_schema(
+            description='Listar os medicamentos de uma consulta.',
+            responses={200: ConsultaSerializer},
+    )
     @action(detail=True, methods=['get'])
     def listar_medicamentos(self, request, pk=None):
         consulta = self.get_object()
         return Response(self.get_serializer(consulta).data)
     
+    @extend_schema(
+            description='Listar os exames de uma consulta.',
+            responses={200: ConsultaExamesSerializer},
+    )
     @action(detail=True, methods=['get'])
     def listar_exames(self, request, pk=None):
         consulta = self.get_object()
-        return Response(consulta.examesSolicitados or [])
+        serializer = ConsultaExamesSerializer(consulta)
+        return Response(serializer.data)
     
+    @extend_schema(
+            description='Adiciona um link para uma videoconferência de telemedicina.',
+            responses={200: ConsultaSerializer},
+            examples=[
+            OpenApiExample(
+                'Exemplo de adição de link para telemedicina',
+                value={
+                    "linkTeleconsulta": "https://meet.google.com/123-qwe-asd",
+                },
+                request_only=True,
+            )
+        ]
+    )
     @action(detail=True, methods=['post'])
     def add_telemedicina_link(self, request, pk=None):
         consulta = self.get_object()
@@ -255,6 +285,10 @@ class ConsultaViewSet(ModelViewSet):
         consulta.save()
         return Response(self.get_serializer(consulta).data)
     
+    @extend_schema(
+            description='Remove o link para uma videoconferência de telemedicina.',
+            responses={200: ConsultaSerializer},
+    )
     @action(detail=True, methods=['post'])
     def remove_telemedicina_link(self, request, pk=None):
         consulta = self.get_object()
@@ -263,6 +297,21 @@ class ConsultaViewSet(ModelViewSet):
 
         return Response(self.get_serializer(consulta).data)
     
+    @extend_schema(
+        description='Adiciona um exame à consulta.',
+        request=AddExameRequestSerializer,
+        responses={200: ConsultaSerializer},
+        examples=[
+            OpenApiExample(
+                'Exemplo de adição de exame',
+                value={
+                    "tipoExame": "Hemograma",
+                    "detalhes": "Verificar níveis de hemoglobina"
+                },
+                request_only=True,
+            )
+        ]
+    )
     @action(detail=True, methods=['post'])
     def add_exame(self, request, pk=None):
         consulta = self.get_object()
@@ -286,6 +335,20 @@ class ConsultaViewSet(ModelViewSet):
 
         return Response(self.get_serializer(consulta).data)
     
+    @extend_schema(
+        description='Cancela um exame da consulta.',
+        request=AddExameRequestSerializer,
+        responses={200: ConsultaSerializer},
+        examples=[
+            OpenApiExample(
+                'Exemplo',
+                value={
+                    "idExame": 1,
+                },
+                request_only=True,
+            )
+        ]
+    )
     @action(detail=True, methods=['post'])
     def cancel_exame(self, request, pk=None):
         consulta = self.get_object()

@@ -48,3 +48,17 @@ class ConsultaSerializer(serializers.ModelSerializer):
         exames = [ce.idExame for ce in consulta_exames]
 
         return ExameSerializer(exames, many=True).data
+
+
+class ConsultaExamesSerializer(serializers.ModelSerializer):
+    exames = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Consulta
+        fields = ['exames']
+        
+    
+    def get_exames(self, obj):
+        consulta_exames = obj.exames_relacionados.all()
+        exames = [ce.idExame for ce in consulta_exames]
+        return ExameSerializer(exames, many=True).data
