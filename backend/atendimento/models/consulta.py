@@ -3,7 +3,6 @@ from django.db import models
 from backend.local.models import Local
 from backend.pessoa.models.paciente import Paciente
 from backend.pessoa.models.saude import ProfissionalSaude
-from backend.atendimento.models.prontuario import Prontuario
 
 
 STATUS_ATENDIMENTO = [
@@ -41,14 +40,6 @@ class Consulta(models.Model):
         on_delete=models.PROTECT,
         verbose_name='Médico',
         db_column='idProfissional'
-    )
-    idProntuario = models.ForeignKey(
-        Prontuario,
-        on_delete=models.PROTECT,
-        verbose_name='Prontuário',
-        db_column='idProntuario',
-        null=True,
-        blank=True
     )
     dataHoraConsulta = models.DateTimeField(
         blank=False,

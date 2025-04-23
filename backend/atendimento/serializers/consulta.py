@@ -3,7 +3,6 @@ from backend.atendimento.models.consulta import Consulta
 from backend.local.serializers import LocalSerializer
 from backend.pessoa.serializers.paciente import PacienteSerializer
 from backend.pessoa.serializers.saude import ProfissionalSaudeSerializer
-from backend.atendimento.serializers.prontuario import ProntuarioSerializer
 from backend.atendimento.serializers.exame import ExameSerializer
 
 
@@ -11,7 +10,6 @@ class ConsultaSerializer(serializers.ModelSerializer):
     local_details = LocalSerializer(source='idLocal', read_only=True)
     paciente_details = PacienteSerializer(source='idPaciente', read_only=True)
     profissional_details = ProfissionalSaudeSerializer(source='idProfissional', read_only=True)
-    prontuario_details = ProntuarioSerializer(source='idProntuario', read_only=True)
     exames = serializers.SerializerMethodField()
     
 
@@ -22,7 +20,7 @@ class ConsultaSerializer(serializers.ModelSerializer):
             'dataHoraConsulta', 'status', 'tipoAtendimento', 'observacoes',
             'linkTeleconsulta', 'sintomas', 'diagnostico', 'medicamentoPrescrito',
             'dataHoraAtendimento', 'local_details', 'paciente_details',
-            'profissional_details', 'prontuario_details', 'exames'  ]
+            'profissional_details', 'exames'  ]
         extra_kwargs = {
             'medicamentoPrescrito': {'required': False},
             'examesSolicitados': {'required': False},
