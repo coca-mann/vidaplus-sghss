@@ -3,7 +3,6 @@ from django.db import models
 from backend.local.models import Local
 from backend.pessoa.models.paciente import Paciente
 from backend.pessoa.models.saude import ProfissionalSaude
-from .prontuario import Prontuario
 
 
 STATUS_ATENDIMENTO = [
@@ -69,48 +68,19 @@ class Consulta(models.Model):
         blank=True,
         null=True
     )
-
-
-class AtendimentoConsulta(models.Model):
-    idAtendimento = models.AutoField(
-        primary_key=True,
-        verbose_name='ID Atendimento'
-    )
-    idLocal = models.ForeignKey(
-        Local,
-        on_delete=models.PROTECT,
-        verbose_name='Local',
-        db_column='idLocal'
-    )
-    idConsulta = models.ForeignKey(
-        Consulta,
-        on_delete=models.PROTECT,
-        verbose_name='Consulta',
-        db_column='idConsulta'
-    )
-    idProntuario = models.ForeignKey(
-        Prontuario,
-        on_delete=models.PROTECT,
-        verbose_name='Prontuário',
-        db_column='idProntuario'
-    )
     sintomas = models.TextField(
         blank=False,
         verbose_name='Sintomas'
     )
     diagnostico = models.TextField(
-        blank=False,
+        blank=True,
+        null=True,
         verbose_name='Diagnóstico'
     )
-    medicamentoPrescritos = models.JSONField(
+    medicamentoPrescrito = models.JSONField(
         blank=True,
         null=True,
         verbose_name='Medicamentos Preescritos'
-    )
-    examesSolicitados = models.JSONField(
-        blank=True,
-        null=True,
-        verbose_name='Exames Solicitados'
     )
     dataHoraAtendimento = models.DateTimeField(
         blank=False,
@@ -118,9 +88,4 @@ class AtendimentoConsulta(models.Model):
     )
 
 
-    class Meta:
-        db_table = 'atendimento_consulta_atendconsulta'
-
-
 auditlog.register(Consulta)
-auditlog.register(AtendimentoConsulta)
