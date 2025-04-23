@@ -37,7 +37,6 @@ class ConsultaViewSet(ModelViewSet):
             if user.is_staff:
                 return
             
-            from backend.pessoa.models.saude import ProfissionalSaude
             try:
                 profissional = ProfissionalSaude.objects.get(idUsuario=user)
 
@@ -64,7 +63,6 @@ class ConsultaViewSet(ModelViewSet):
         user = self.request.user
         
         if not user.is_staff:
-            from backend.pessoa.models.saude import ProfissionalSaude
             try:
                 profissional = ProfissionalSaude.objects.get(idUsuario=user)
                 serializer.validated_data['idProfissional'] = profissional
@@ -157,7 +155,6 @@ class ConsultaViewSet(ModelViewSet):
             except ProfissionalSaude.DoesNotExist:
                 raise PermissionDenied("Apenas profissionais de saúde podem modificar consultas.")
 
-        from backend.atendimento.serializers.medicamento import MedicamentoSerializer
         serializer = MedicamentoSerializer(data=request.data)
 
         if not serializer.is_valid():
@@ -205,7 +202,6 @@ class ConsultaViewSet(ModelViewSet):
             except ProfissionalSaude.DoesNotExist:
                 raise PermissionDenied("Apenas profissionais de saúde podem modificar consultas.")
         
-        from backend.atendimento.serializers.medicamento import RemoveMedicamentoSerializer
         serializer = RemoveMedicamentoSerializer(data=request.data)
         
         if not serializer.is_valid():
@@ -240,48 +236,6 @@ class ConsultaViewSet(ModelViewSet):
     @action(detail=True, methods=['get'])
     def listar_medicamentos(self, request, pk=None):
         consulta = self.get_object()
-        return Response(self.get_serializer(consulta).data)
-    
-    @action(detail=True, methods=['post'])
-    def add_exame(self, request, pk=None):
-        consulta = self.get_object()
-        exame = request.data.get('exame', {})
-
-        if not all(key in exame for key in ['tipoExame', 'dataSolicitacao']):
-            raise ValidationError("O exame deve conter 'tipoExame' e 'dataSolicitacao'.")
-        
-        if consulta.examesSolicitados is None:
-            consulta.examesSolicitados = []
-
-        for i, ex in enumerate(consulta.examesSolicitados):
-            if (ex.get('tipoExame') == exame.get('tipoExame') and ex.get('dataSolicitacao') == exame.get('dataSolicitacao')):
-                consulta.examesSolicitados[i] = exame
-                consulta.save()
-                return Response(self.get_serializer(consulta).data)
-            
-        consulta.examesSolicitados.append(exame)
-        consulta.save()
-
-        return Response(self.get_serializer(consulta).data)
-    
-    @action(detail=True, methods=['post'])
-    def remove_exame(self, request, pk=None):
-        consulta = self.get_object()
-        tipo_exame = request.data.get('tipoExame')
-        data_solicitacao = request.data.get('dataSolicitacao')
-
-        if not tipo_exame or not data_solicitacao:
-            raise ValidationError("É necessário informar o tipo e a data de solicitação do exame a ser removido.")
-        
-        if consulta.examesSolicitados is None:
-            return Response(self.get_serializer(consulta).data)
-        
-        consulta.examesSolicitados = [
-            ex for ex in consulta.examesSolicitados
-            if not (ex.get('tipoExame') == tipo_exame and ex.get('dataSolicitacao') == data_solicitacao)
-        ]
-
-        consulta.save()
         return Response(self.get_serializer(consulta).data)
     
     @action(detail=True, methods=['get'])
