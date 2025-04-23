@@ -11,7 +11,11 @@ from backend.backoffice.serializers.estoque import (
     UnidadeMedidaSerializer
 )
 
-
+'''
+ESTOQUE E SUPRIMENTO
+- Somente administradores do tipo GESTOR podem criar, editar e excluir dados
+- Médicos e pacientes não podem ver essas informações
+'''
 class EstoqueSuprimentoViewSet(ModelViewSet):
     queryset = EstoqueSuprimento.objects.all()
     serializer_class = EstoqueSuprimeiroSerializer

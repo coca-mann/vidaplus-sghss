@@ -11,7 +11,11 @@ from backend.backoffice.serializers.compras import (
     PedidoCompraSerializer
 )
 
-
+'''
+FORNECEDOR E PEDIDO COMPRA
+- Somente administradores do tipo DIRFINAN, DIRGERAL, DIRADMIN e GESTOR podem ver, editar e excluir dados.
+- Pacientes e médicos não pode ver essas informações
+'''
 class FornecedorViewSet(ModelViewSet):
     queryset = Fornecedor.objects.all()
     serializer_class = FornecedorSerializer
