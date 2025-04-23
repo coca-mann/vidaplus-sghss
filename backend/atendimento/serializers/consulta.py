@@ -16,7 +16,7 @@ class ConsultaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consulta
         fields = [
-            'idConsulta', 'idLocal', 'idPaciente', 'idProfissional', 'idProntuario',
+            'idConsulta', 'idLocal', 'idPaciente', 'idProfissional',
             'dataHoraConsulta', 'status', 'tipoAtendimento', 'observacoes',
             'linkTeleconsulta', 'sintomas', 'diagnostico', 'medicamentoPrescrito',
             'dataHoraAtendimento', 'local_details', 'paciente_details',
