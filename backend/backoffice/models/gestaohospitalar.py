@@ -55,7 +55,9 @@ class Leito(models.Model):
         Paciente,
         on_delete=models.PROTECT,
         verbose_name='Paciente',
-        db_column='idPaciente'
+        db_column='idPaciente',
+        blank=True,
+        null=True
     )
     idAla = models.ForeignKey(
         Ala,
@@ -72,7 +74,8 @@ class Leito(models.Model):
         max_length=10,
         choices=STATUS_LEITO,
         blank=False,
-        verbose_name='Status'
+        verbose_name='Status',
+        default='DISP'
     )
     observacao = models.TextField(
         blank=True,
