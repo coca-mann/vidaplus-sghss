@@ -6,11 +6,12 @@ from rest_framework import status
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from backend.backoffice.serializers.gestaohospitalar import InternarPacienteSerializer, LiberarPacienteSerializer
+from backend.backoffice.serializers.gestaohospitalar import InternarPacienteSerializer, LiberarPacienteSerializer, AtualizarStatusSerializer
 from backend.backoffice.models.gestaohospitalar import (
     Ala,
     Leito,
-    LogOcupacaoLeito
+    LogOcupacaoLeito,
+    STATUS_LEITO
 )
 from backend.backoffice.serializers.gestaohospitalar import (
     AlaSerializer,
@@ -182,6 +183,49 @@ class LeitoViewSet(ModelViewSet):
 
         log_serializer = LogOcupacaoLeitoSerializer(log_ocupacao)
         return Response(log_serializer.data, status=status.HTTP_200_OK)
+    
+    @extend_schema(
+            request=AtualizarStatusSerializer,
+            responses={200, LeitoSerializer},
+            description="Atualiza o status de um leito que não está ocupado por um paciente."
+    )
+    @action(detail=True, methods=['post'], url_path='atualizar_status')
+    def atualizar_status(self, request, pk=None):
+        leito = self.get_object()
+        user = request.user
+        
+        if leito.idPaciente is not None:
+            return Response(
+                {'detail': 'Este leito está ocupado por um paciente e não pode mudar de status.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if 'status' not in request.data:
+            return Response(
+                {'detail': 'É necessário fornecer um status para atualização.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        novo_status = request.data['status']
+
+        valid_statuses = [choice[0] for choice in STATUS_LEITO]
+        if novo_status not in valid_statuses:
+            return Response(
+                {'detail': f'Status inválido. Opções válidas: {", ".join(valid_statuses)}'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if novo_status == 'OCUP':
+            return Response(
+                {'detail': 'Não é possível alterar o status para OCUP sem associar um paciente. Use a função internar_paciente.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        leito.status = novo_status
+        leito.save()
+
+        serializer = self.get_serializer(leito)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 '''

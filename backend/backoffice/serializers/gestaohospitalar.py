@@ -96,3 +96,15 @@ class LiberarPacienteSerializer(serializers.Serializer):
             raise serializers.ValidationError('Profissional de saúde não encontrado.')
         
         return data
+
+
+class AtualizarStatusSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(
+        choices=[
+            ('DISP', 'Disponível'),
+            ('HIGI', 'Higienização'),
+            ('MANU', 'Manutenção'),
+            ('DESA', 'Desativado'),
+        ],
+        help_text="Novo status para o leito. Não é possível atualizar diretamente para 'OCUP'."
+    )
