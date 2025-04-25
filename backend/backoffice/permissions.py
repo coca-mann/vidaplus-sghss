@@ -88,3 +88,21 @@ class LeitoPermission(BasePermission):
             return leitos_ocupados_pelo_paciente
         
         return False
+
+
+class IsAdminOrManager(BasePermission):
+
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+        
+        ADMIN_TYPES = ['DIRFINAN', 'DIRGERAL', 'DIRADMIN', 'GESTOR']
+
+        if request.user.is_superuser:
+            return True
+        
+        try:
+            administrador = Administrador.objects.get(idUsuario=request.user)
+            return administrador.cargo in ADMIN_TYPES
+        except Administrador.DoesNotExist:
+            return False

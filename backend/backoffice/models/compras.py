@@ -46,6 +46,10 @@ class Fornecedor(models.Model):
         blank=False,
         verbose_name='Endereço'
     )
+    ativo = models.BooleanField(
+        default=True,
+        verbose_name='Ativo'
+    )
 
 
     class Meta:
