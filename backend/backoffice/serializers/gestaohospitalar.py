@@ -3,7 +3,8 @@ from rest_framework import serializers
 from backend.backoffice.models.gestaohospitalar import (
     Ala,
     Leito,
-    LogOcupacaoLeito
+    LogOcupacaoLeito,
+    STATUS_LEITO
 )
 from backend.pessoa.models.paciente import Paciente
 from backend.pessoa.models.saude import ProfissionalSaude
@@ -100,11 +101,6 @@ class LiberarPacienteSerializer(serializers.Serializer):
 
 class AtualizarStatusSerializer(serializers.Serializer):
     status = serializers.ChoiceField(
-        choices=[
-            ('DISP', 'Disponível'),
-            ('HIGI', 'Higienização'),
-            ('MANU', 'Manutenção'),
-            ('DESA', 'Desativado'),
-        ],
+        choices=STATUS_LEITO,
         help_text="Novo status para o leito. Não é possível atualizar diretamente para 'OCUP'."
     )

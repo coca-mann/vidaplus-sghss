@@ -10,6 +10,7 @@ STATUS_LEITO = [
     ('OCUP', 'Ocupado'),
     ('HIGI', 'Higienização'),
     ('MANU', 'Manutenção'),
+    ('DESA', 'Desativado'),
 ]
 
 
