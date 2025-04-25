@@ -31,7 +31,7 @@ router.register('unidademedida', UnidadeMedidaViewSet)
 router.register('categoriafinanceira', CategoriaFinanceiraViewSet)
 router.register('lancamentofinanceiro', LancamentoFinanceiroViewSet)
 router.register('ala', AlaViewSet, basename='ala')
-router.register('leito', LeitoViewSet)
+router.register(r'leito', LeitoViewSet, basename='leito')
 router.register('logleito', LogOcupacaoLeitoViewSet)
 
 
