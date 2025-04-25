@@ -3,9 +3,9 @@ from django.db import transaction
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from drf_spectacular.utils import OpenApiExample, extend_schema
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from backend.backoffice.serializers.gestaohospitalar import InternarPacienteSerializer, LiberarPacienteSerializer
 from backend.backoffice.models.gestaohospitalar import (
     Ala,
@@ -190,7 +190,11 @@ LOG LEITOS
 - Administradores não podem internar nem liberar leitos
 - Pacientes podem ver apenas seus próprios leitos ocupado
 '''
-class LogOcupacaoLeitoViewSet(ModelViewSet):
+@extend_schema_view(
+    list=extend_schema(description='Listar todos os registros de LogOcupacaoLeito'),
+    retrieve=extend_schema(description='Recuperar um registro específico de LogOcupacaoLeito')
+)
+class LogOcupacaoLeitoViewSet(ReadOnlyModelViewSet):
     queryset = LogOcupacaoLeito.objects.all()
     serializer_class = LogOcupacaoLeitoSerializer
     permission_classes = [IsAuthenticated]
