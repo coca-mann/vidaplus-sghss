@@ -81,3 +81,18 @@ class InternarPacienteSerializer(serializers.Serializer):
             raise serializers.ValidationError('Profissional de saúde não encontrado.')
         
         return data
+
+
+class LiberarPacienteSerializer(serializers.Serializer):
+    idProfissionalLiberacao = serializers.IntegerField()
+    dataHoraSaida = serializers.DateTimeField(default=timezone.now)
+    motivoLiberacao = serializers.CharField()
+    observacao = serializers.CharField(required=False, allow_blank=True)
+
+    def validate(self, data):
+        try:
+            profissional = ProfissionalSaude.objects.get(pk=data['idProfissionalLiberacao'])
+        except ProfissionalSaude.DoesNotExist:
+            raise serializers.ValidationError('Profissional de saúde não encontrado.')
+        
+        return data

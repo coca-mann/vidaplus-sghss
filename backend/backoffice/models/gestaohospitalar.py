@@ -139,6 +139,10 @@ class LogOcupacaoLeito(models.Model):
         blank=False,
         verbose_name='Motivo da Internação'
     )
+    motivoLiberacao = models.TextField(
+        blank=False,
+        verbose_name='Motivo da Liberação'
+    )
     observacao = models.TextField(
         blank=True,
         null=True,
