@@ -32,7 +32,7 @@ router.register('categoriafinanceira', CategoriaFinanceiraViewSet)
 router.register('lancamentofinanceiro', LancamentoFinanceiroViewSet)
 router.register('ala', AlaViewSet, basename='ala')
 router.register(r'leito', LeitoViewSet, basename='leito')
-router.register('logleito', LogOcupacaoLeitoViewSet)
+router.register(r'logleito', LogOcupacaoLeitoViewSet, basename='logleito')
 
 
 urlpatterns = [

@@ -195,6 +195,17 @@ LOG LEITOS
     retrieve=extend_schema(description='Recuperar um registro específico de LogOcupacaoLeito')
 )
 class LogOcupacaoLeitoViewSet(ReadOnlyModelViewSet):
-    queryset = LogOcupacaoLeito.objects.all()
     serializer_class = LogOcupacaoLeitoSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        try:
+            paciente = Paciente.objects.filter(idUsuario=user)
+            return LogOcupacaoLeito.objects.filter(idPaciente=paciente).select_related('idLocal', 'idLeito', 'idProfissionalInternacao', 'idProfissionalLiberacao')
+        except Paciente.DoesNotExist:
+            return Response(
+                {'detail': 'Nenhum log de ocupação de leito encontrado para este paciente.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
