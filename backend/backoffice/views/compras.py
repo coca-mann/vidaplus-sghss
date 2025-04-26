@@ -50,7 +50,7 @@ class FornecedorViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
-@extend_schema(tags="Itens de Pedido")
+@extend_schema(tags=['Compras'])
 class ItemPedidoViewSet(ModelViewSet):
     queryset = ItemPedidoCompra.objects.all()
     serializer_class = ItemPedidoSerializer
@@ -111,7 +111,7 @@ class ItemPedidoViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
-@extend_schema(tags=["Pedidos de Compra"])
+@extend_schema(tags=['Compras'])
 class PedidoCompraViewSet(ModelViewSet):
     queryset = PedidoCompra.objects.all()
     serializer_class = PedidoCompraSerializer
@@ -161,7 +161,7 @@ class PedidoCompraViewSet(ModelViewSet):
 
         serializer = self.get_serializer(pedido)
         return Response(serializer.data)
-    
+
     @extend_schema(
         summary="Listar itens do pedido",
         description="Retorna todos os itens associados a um pedido específico",
@@ -174,7 +174,7 @@ class PedidoCompraViewSet(ModelViewSet):
 
         serializer = ItemPedidoSerializer(itens, many=True)
         return Response(serializer.data)
-    
+
     @extend_schema(
         summary="Filtrar pedidos por status",
         description="Retorna pedidos com um status específico",

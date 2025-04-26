@@ -31,6 +31,7 @@ ALA
 - Médicos podem ver alas com leitos ocupados
 - Pacientes não podem ver alas
 '''
+@extend_schema(tags=['Gestão hospitalar'])
 class AlaViewSet(ModelViewSet):
     serializer_class = AlaSerializer
     permission_classes = [IsAuthenticated, AlaPermission]
@@ -54,6 +55,7 @@ LEITOS
 - Somente administradores podem editar leitos
 - Médicos podem ver detalhes dos pacientes nos leitos
 '''
+@extend_schema(tags=['Gestão hospitalar'])
 class LeitoViewSet(ModelViewSet):
     queryset = Leito.objects.all()
     serializer_class = LeitoSerializer
@@ -236,7 +238,8 @@ LOG LEITOS
 '''
 @extend_schema_view(
     list=extend_schema(description='Listar todos os registros de LogOcupacaoLeito'),
-    retrieve=extend_schema(description='Recuperar um registro específico de LogOcupacaoLeito')
+    retrieve=extend_schema(description='Recuperar um registro específico de LogOcupacaoLeito'),
+    tags=['Gestão hospitalar']
 )
 class LogOcupacaoLeitoViewSet(ReadOnlyModelViewSet):
     serializer_class = LogOcupacaoLeitoSerializer
