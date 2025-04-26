@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from auditlog.registry import auditlog
 from backend.local.models import Local
 
@@ -50,6 +51,14 @@ class Administrador(models.Model):
         blank=True,
         null=True,
         verbose_name='E-mail'
+    )
+    idUsuario = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        verbose_name='Usuário',
+        null=True,
+        blank=True,
+        db_column='idUsuario'
     )
 
     def __str__(self):

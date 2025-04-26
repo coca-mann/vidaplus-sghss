@@ -2,6 +2,7 @@ from auditlog.registry import auditlog
 from django.db import models
 from backend.local.models import Local
 from backend.pessoa.models.paciente import Paciente
+from backend.pessoa.models.saude import ProfissionalSaude
 
 
 STATUS_LEITO = [
@@ -9,6 +10,7 @@ STATUS_LEITO = [
     ('OCUP', 'Ocupado'),
     ('HIGI', 'Higienização'),
     ('MANU', 'Manutenção'),
+    ('DESA', 'Desativado'),
 ]
 
 
@@ -54,7 +56,9 @@ class Leito(models.Model):
         Paciente,
         on_delete=models.PROTECT,
         verbose_name='Paciente',
-        db_column='idPaciente'
+        db_column='idPaciente',
+        blank=True,
+        null=True
     )
     idAla = models.ForeignKey(
         Ala,
@@ -71,7 +75,8 @@ class Leito(models.Model):
         max_length=10,
         choices=STATUS_LEITO,
         blank=False,
-        verbose_name='Status'
+        verbose_name='Status',
+        default='DISP'
     )
     observacao = models.TextField(
         blank=True,
@@ -107,9 +112,25 @@ class LogOcupacaoLeito(models.Model):
         verbose_name='Leito',
         db_column='idLeito'
     )
+    idProfissionalInternacao = models.ForeignKey(
+        ProfissionalSaude,
+        on_delete=models.PROTECT,
+        verbose_name='Profissional de internação',
+        db_column='idProfissionalInternacao',
+        related_name='profissional_internacao'
+    )
     dataHoraEntrada = models.DateTimeField(
         blank=False,
         verbose_name='Data/Hora Entrada'
+    )
+    idProfissionalLiberacao = models.ForeignKey(
+        ProfissionalSaude,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        verbose_name='Profissional de liberação',
+        db_column='idProfissionalLiberacao',
+        related_name='profissional_liberacao'
     )
     dataHoraSaida = models.DateTimeField(
         blank=False,
@@ -118,6 +139,10 @@ class LogOcupacaoLeito(models.Model):
     motivoInternacao = models.TextField(
         blank=False,
         verbose_name='Motivo da Internação'
+    )
+    motivoLiberacao = models.TextField(
+        blank=False,
+        verbose_name='Motivo da Liberação'
     )
     observacao = models.TextField(
         blank=True,
