@@ -32,6 +32,32 @@ ALA
 - Pacientes não podem ver alas
 '''
 @extend_schema(tags=['Gestão hospitalar'])
+@extend_schema_view(
+    list=extend_schema(
+        description="Lista todas as alas disponíveis conforme as permissões do usuário.",
+        summary="Listar alas"
+    ),
+    retrieve=extend_schema(
+        description="Recupera detalhes de uma ala específica.",
+        summary="Detalhar ala"
+    ),
+    create=extend_schema(
+        description="Cria uma nova ala (apenas administradores).",
+        summary="Criar ala"
+    ),
+    update=extend_schema(
+        description="Atualiza uma ala existente (apenas administradores).",
+        summary="Atualizar ala"
+    ),
+    partial_update=extend_schema(
+        description="Atualiza parcialmente uma ala (apenas administradores).",
+        summary="Atualizar parcialmente ala"
+    ),
+    destroy=extend_schema(
+        description="Remove uma ala (apenas administradores).",
+        summary="Remover ala"
+    ),
+)
 class AlaViewSet(ModelViewSet):
     serializer_class = AlaSerializer
     permission_classes = [IsAuthenticated, AlaPermission]
@@ -56,6 +82,32 @@ LEITOS
 - Médicos podem ver detalhes dos pacientes nos leitos
 '''
 @extend_schema(tags=['Gestão hospitalar'])
+@extend_schema_view(
+    list=extend_schema(
+        description="Lista todos os leitos do hospital.",
+        summary="Listar leitos"
+    ),
+    retrieve=extend_schema(
+        description="Recupera detalhes de um leito específico.",
+        summary="Detalhar leito"
+    ),
+    create=extend_schema(
+        description="Cria um novo leito (apenas administradores).",
+        summary="Criar leito"
+    ),
+    update=extend_schema(
+        description="Atualiza um leito existente (apenas administradores).",
+        summary="Atualizar leito"
+    ),
+    partial_update=extend_schema(
+        description="Atualiza parcialmente um leito.",
+        summary="Atualizar parcialmente leito"
+    ),
+    destroy=extend_schema(
+        description="Remove um leito (apenas administradores).",
+        summary="Remover leito"
+    ),
+)
 class LeitoViewSet(ModelViewSet):
     queryset = Leito.objects.all()
     serializer_class = LeitoSerializer
@@ -76,7 +128,8 @@ class LeitoViewSet(ModelViewSet):
     @extend_schema(
             request=InternarPacienteSerializer,
             responses={200: LogOcupacaoLeitoSerializer},
-            description="Realiza a internação de um paciente em um leito"
+            description="Realiza a internação de um paciente em um leito",
+            summary="Internar um paciente em um leito"
     )
 
     @action(detail=True, methods=['post'], url_path='internar_paciente')
@@ -131,7 +184,8 @@ class LeitoViewSet(ModelViewSet):
     @extend_schema(
             request=LiberarPacienteSerializer,
             responses={200: LogOcupacaoLeitoSerializer},
-            description="Realiza a liberação de um paciente em um leito"
+            description="Realiza a liberação de um paciente em um leito",
+            summary="Liberar o paciente de um leito"
     )
     @action(detail=True, methods=['post'], url_path='liberar_paciente')
     def liberar_paciente(self, request, pk=None):
@@ -189,7 +243,8 @@ class LeitoViewSet(ModelViewSet):
     @extend_schema(
             request=AtualizarStatusSerializer,
             responses={200, LeitoSerializer},
-            description="Atualiza o status de um leito que não está ocupado por um paciente."
+            description="Atualiza o status de um leito que não está ocupado por um paciente.",
+            summary='Atualizar status de um leito'
     )
     @action(detail=True, methods=['post'], url_path='atualizar_status')
     def atualizar_status(self, request, pk=None):
@@ -236,10 +291,16 @@ LOG LEITOS
 - Administradores não podem internar nem liberar leitos
 - Pacientes podem ver apenas seus próprios leitos ocupado
 '''
+@extend_schema(tags=['Gestão hospitalar'])
 @extend_schema_view(
-    list=extend_schema(description='Listar todos os registros de LogOcupacaoLeito'),
-    retrieve=extend_schema(description='Recuperar um registro específico de LogOcupacaoLeito'),
-    tags=['Gestão hospitalar']
+    list=extend_schema(
+        description='Lista todos os registros de ocupação de leitos acessíveis ao usuário.',
+        summary='Listar logs de ocupação'
+    ),
+    retrieve=extend_schema(
+        description='Recupera um registro específico de ocupação de leito.',
+        summary='Detalhar log de ocupação'
+    ),
 )
 class LogOcupacaoLeitoViewSet(ReadOnlyModelViewSet):
     serializer_class = LogOcupacaoLeitoSerializer

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
 from rest_framework.decorators import action
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, OpenApiResponse, inline_serializer
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, OpenApiResponse, inline_serializer, extend_schema_view
 from drf_spectacular.types import OpenApiTypes
 from backend.backoffice.models.compras import (
     Fornecedor,
@@ -25,6 +25,32 @@ FORNECEDOR E PEDIDO COMPRA
 - Pacientes e médicos não pode ver essas informações
 '''
 @extend_schema(tags=['Fornecedores'])
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar fornecedores",
+        description="Lista todos os fornecedores cadastrados."
+    ),
+    retrieve=extend_schema(
+        summary="Detalhar fornecedor",
+        description="Recupera os detalhes de um fornecedor específico."
+    ),
+    create=extend_schema(
+        summary="Criar fornecedor",
+        description="Cadastra um novo fornecedor."
+    ),
+    update=extend_schema(
+        summary="Atualizar fornecedor",
+        description="Atualiza todos os dados de um fornecedor existente."
+    ),
+    partial_update=extend_schema(
+        summary="Atualização parcial de fornecedor",
+        description="Atualiza parcialmente os dados de um fornecedor."
+    ),
+    destroy=extend_schema(
+        summary="Remover fornecedor",
+        description="Remove um fornecedor do sistema."
+    ),
+)
 class FornecedorViewSet(ModelViewSet):
     queryset = Fornecedor.objects.all()
     serializer_class = FornecedorSerializer
@@ -51,6 +77,32 @@ class FornecedorViewSet(ModelViewSet):
 
 
 @extend_schema(tags=['Compras'])
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar itens de pedido",
+        description="Lista todos os itens de pedido cadastrados."
+    ),
+    retrieve=extend_schema(
+        summary="Detalhar item de pedido",
+        description="Recupera os detalhes de um item de pedido específico."
+    ),
+    create=extend_schema(
+        summary="Criar item de pedido",
+        description="Adiciona um novo item a um pedido de compra."
+    ),
+    update=extend_schema(
+        summary="Atualizar item de pedido",
+        description="Atualiza todos os dados de um item de pedido existente."
+    ),
+    partial_update=extend_schema(
+        summary="Atualização parcial de item de pedido",
+        description="Atualiza parcialmente os dados de um item de pedido."
+    ),
+    destroy=extend_schema(
+        summary="Remover item de pedido",
+        description="Remove um item de pedido do sistema."
+    ),
+)
 class ItemPedidoViewSet(ModelViewSet):
     queryset = ItemPedidoCompra.objects.all()
     serializer_class = ItemPedidoSerializer
@@ -112,6 +164,32 @@ class ItemPedidoViewSet(ModelViewSet):
 
 
 @extend_schema(tags=['Compras'])
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar pedidos de compra",
+        description="Lista todos os pedidos de compra cadastrados."
+    ),
+    retrieve=extend_schema(
+        summary="Detalhar pedido de compra",
+        description="Recupera os detalhes de um pedido de compra específico."
+    ),
+    create=extend_schema(
+        summary="Criar pedido de compra",
+        description="Cadastra um novo pedido de compra."
+    ),
+    update=extend_schema(
+        summary="Atualizar pedido de compra",
+        description="Atualiza todos os dados de um pedido de compra existente."
+    ),
+    partial_update=extend_schema(
+        summary="Atualização parcial de pedido de compra",
+        description="Atualiza parcialmente os dados de um pedido de compra."
+    ),
+    destroy=extend_schema(
+        summary="Remover pedido de compra",
+        description="Remove um pedido de compra do sistema."
+    ),
+)
 class PedidoCompraViewSet(ModelViewSet):
     queryset = PedidoCompra.objects.all()
     serializer_class = PedidoCompraSerializer
