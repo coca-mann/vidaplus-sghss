@@ -8,7 +8,8 @@ from backend.backoffice.views.compras import (
 from backend.backoffice.views.estoque import (
     EstoqueSuprimentoViewSet,
     SuprimentoViewSet,
-    UnidadeMedidaViewSet
+    UnidadeMedidaViewSet,
+    MovimentacaoSuprimentoViewSet
 )
 from backend.backoffice.views.financeiro import (
     CategoriaFinanceiraViewSet,
@@ -33,6 +34,7 @@ router.register('lancamentofinanceiro', LancamentoFinanceiroViewSet)
 router.register('ala', AlaViewSet, basename='ala')
 router.register(r'leito', LeitoViewSet, basename='leito')
 router.register(r'logleito', LogOcupacaoLeitoViewSet, basename='logleito')
+router.register(r'movimentacaosuprimento', MovimentacaoSuprimentoViewSet, basename='movimentacao-suprimento')
 
 
 urlpatterns = [

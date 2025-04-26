@@ -106,3 +106,15 @@ class IsAdminOrManager(BasePermission):
             return administrador.cargo in ADMIN_TYPES
         except Administrador.DoesNotExist:
             return False
+
+
+class IsGestor(BasePermission):
+
+    def has_permission(self, request, view):
+        user = request.user
+        is_gestor = Administrador.objects.filter(idUsuario=user, cargo__contains='GESTOR').exists()
+
+        if is_gestor:
+            return True
+        
+        return False
