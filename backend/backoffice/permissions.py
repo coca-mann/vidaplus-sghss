@@ -118,3 +118,22 @@ class IsGestor(BasePermission):
             return True
         
         return False
+
+
+class IsFinanceAdmin(BasePermission):
+
+    def has_permission(self, request, view):
+
+        FINANCE_TYPES = ['DIRFINAN', 'DIRGERAL', 'DIRADMIN']
+
+        user = request.user
+        is_finance_admin = Administrador.objects.filter(idUsuario=user, cargo__in=FINANCE_TYPES).exists()
+        print(is_finance_admin)
+
+        if not user or not user.is_authenticated:
+            return False
+        
+        if is_finance_admin:
+            return True
+
+        return False
