@@ -7,4 +7,9 @@ class AtendimentoConfig(AppConfig):
     verbose_name = 'Atendimento'
 
     def ready(self):
-        import backend.atendimento.models
+        try:
+            import backend.atendimento.models.consulta
+            import backend.atendimento.models.exame
+            import backend.atendimento.models.consulta_exame
+        except ImportError as e:
+            print(f"Erro ao importar modelos: {e}")
