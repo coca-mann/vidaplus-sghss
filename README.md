@@ -96,18 +96,29 @@ Atualmente os testes são manuais via Insomnia, com diferentes perfis de usuári
 
 ```bash
 vidaplus-sghss/
-├── atendimento/
-├── auditoria/
-├── backoffice/
-│   ├── compras/
-│   ├── estoque/
-│   ├── financeiro/
-│   └── gestao_hospitalar/
-├── local/
-├── pessoa/
-├── utils/
+├── backend/
+│   ├── atendimento/
+│   ├── auditoria/
+│   ├── backoffice/
+│   │   ├── compras/
+│   │   ├── estoque/
+│   │   ├── financeiro/
+│   │   └── gestaohospitalar/
+│   ├── local/
+│   ├── pessoa/
+│   │   ├── management/
+│   │   │   └── commands/
+│   │   ├── models/
+│   │   ├── serializers/
+│   │   ├── views/
+│   │   └── urls.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
 ├── documentation/
-├── media/
+├── venv/
+├── .gitignore
 ├── manage.py
 ├── requirements.txt
 └── README.md
