@@ -137,3 +137,9 @@ SIMPLE_JWT = {
 
 AUDITLOG_INCLUDE_ALL_MODELS = False
 AUDITLOG_GET_REMOTE_ADDR = 'auditlog.middleware._get_remote_addr'
+
+SPECTACULAR_SWAGGER_UI_SETTINGS = {
+    "deepLinking": True,
+    "persistAuthorization": True,
+    "tagsSorter": "alpha",
+}

@@ -5,7 +5,7 @@ from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from datetime import datetime
-from drf_spectacular.utils import extend_schema, OpenApiExample
+from drf_spectacular.utils import extend_schema, OpenApiExample, extend_schema_view
 from backend.atendimento.models.consulta import Consulta
 from backend.atendimento.models.exame import Exame
 from backend.atendimento.models.consulta_exame import ConsultaExame
@@ -23,6 +23,44 @@ CONSULTA
 - Criar campos em examesSolicitados: tipoExame, dataSolicitacao, dataRealizacao, resultadoExame, status
 - Atualizar campos de exames conforme atualização no model Exame
 '''
+@extend_schema(
+    tags=['Consultas'],
+    description=(
+        "API para gerenciamento de consultas. "
+        "Apenas profissionais habilitados podem criar consultas. "
+        "Inclui endpoints para medicamentos, exames, telemedicina e controle de status."
+    )
+)
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar consultas",
+        description="Lista todas as consultas que o usuário autenticado pode visualizar.",
+        responses={200: ConsultaSerializer(many=True)}
+    ),
+    retrieve=extend_schema(
+        summary="Detalhar consulta",
+        description="Retorna os detalhes de uma consulta específica.",
+        responses={200: ConsultaSerializer}
+    ),
+    create=extend_schema(
+        summary="Criar consulta",
+        description="Cria uma nova consulta para o profissional autenticado.",
+        responses={201: ConsultaSerializer}
+    ),
+    update=extend_schema(
+        summary="Atualizar consulta",
+        description="Atualiza todos os dados de uma consulta existente.",
+        responses={200: ConsultaSerializer}
+    ),
+    partial_update=extend_schema(
+        summary="Atualização parcial de consulta",
+        description="Atualiza parcialmente os dados de uma consulta.",
+        responses={200: ConsultaSerializer}
+    ),
+    destroy=extend_schema(
+        exclude=True  # Oculta do Swagger, conforme já está no seu código
+    ),
+)
 class ConsultaViewSet(ModelViewSet):
     queryset = Consulta.objects.all()
     serializer_class = ConsultaSerializer
@@ -97,8 +135,9 @@ class ConsultaViewSet(ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
     @extend_schema(
-            description='Listar as consultas pendentes do usuário.',
-            responses={200: ConsultaSerializer},
+        summary="Listar consultas pendentes",
+        description="Listar todas as consultas com status 'Agendada' para o usuário autenticado.",
+        responses={200: ConsultaSerializer(many=True)}
     )
     @action(detail=False, methods=['get'])
     def consultas_pendentes(self, request):
@@ -107,8 +146,9 @@ class ConsultaViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @extend_schema(
-            description='Cancelar a consulta informada.',
-            responses={Response(status=status.HTTP_204_NO_CONTENT)},
+        summary="Cancelar consulta",
+        description="Cancelar a consulta informada e altera seu status para 'Cancelada'.",
+        responses={200: ConsultaSerializer}
     )
     @action(detail=True, methods=['post'])
     def cancelar_consulta(self, request, pk=None):
@@ -119,7 +159,8 @@ class ConsultaViewSet(ModelViewSet):
         return Response(serializer.data)
     
     @extend_schema(
-            description='Marcar a consulta informada como Realizada.',
+            description='Realiza a alteração do status da consulta para Realizada.',
+            summary="Marcar a consulta como Realizada",
             responses={200: ConsultaSerializer},
     )
     @action(detail=True, methods=['post'])
@@ -134,7 +175,8 @@ class ConsultaViewSet(ModelViewSet):
     @extend_schema(
         request=MedicamentoSerializer,
         responses={200: ConsultaSerializer},
-        description="Adiciona um medicamento à consulta",
+        description="Adicionar um medicamento à consulta",
+        summary="Adicionar medicamento às Medicações Prescritas",
         examples=[
             OpenApiExample(
                 'Exemplo de adição de medicamento',
@@ -149,7 +191,6 @@ class ConsultaViewSet(ModelViewSet):
             )
         ]
     )
-
     @action(detail=True, methods=['post'])
     def add_medicamento(self, request, pk=None):
         consulta = self.get_object()
@@ -186,6 +227,7 @@ class ConsultaViewSet(ModelViewSet):
     @extend_schema(
         request=RemoveMedicamentoSerializer,
         responses={200: ConsultaSerializer},
+        summary="Remover medicamento das Medicações Prescritas",
         description="Remove um medicamento da consulta",
         examples=[
             OpenApiExample(
@@ -197,7 +239,6 @@ class ConsultaViewSet(ModelViewSet):
             )
         ]
     )
-
     @action(detail=True, methods=['post'])
     def remove_medicamento(self, request, pk=None):
         consulta = self.get_object()
@@ -243,6 +284,7 @@ class ConsultaViewSet(ModelViewSet):
     
     @extend_schema(
             description='Listar os medicamentos de uma consulta.',
+            summary="Listar todos os Medicamentos Prescritos",
             responses={200: ConsultaSerializer},
     )
     @action(detail=True, methods=['get'])
@@ -252,6 +294,7 @@ class ConsultaViewSet(ModelViewSet):
     
     @extend_schema(
             description='Listar os exames de uma consulta.',
+            summary="Listar os exames de uma consulta",
             responses={200: ConsultaExamesSerializer},
     )
     @action(detail=True, methods=['get'])
@@ -262,6 +305,7 @@ class ConsultaViewSet(ModelViewSet):
     
     @extend_schema(
             description='Adiciona um link para uma videoconferência de telemedicina.',
+            summary="Adicionar link de telemedicina",
             responses={200: ConsultaSerializer},
             examples=[
             OpenApiExample(
@@ -287,6 +331,7 @@ class ConsultaViewSet(ModelViewSet):
     
     @extend_schema(
             description='Remove o link para uma videoconferência de telemedicina.',
+            summary="Remover link de telemedicina",
             responses={200: ConsultaSerializer},
     )
     @action(detail=True, methods=['post'])
@@ -301,6 +346,7 @@ class ConsultaViewSet(ModelViewSet):
         description='Adiciona um exame à consulta.',
         request=AddExameRequestSerializer,
         responses={200: ConsultaSerializer},
+        summary="Adicionar um exame a consulta",
         examples=[
             OpenApiExample(
                 'Exemplo de adição de exame',
@@ -339,6 +385,7 @@ class ConsultaViewSet(ModelViewSet):
         description='Cancela um exame da consulta.',
         request=AddExameRequestSerializer,
         responses={200: ConsultaSerializer},
+        summary="Cancelar um exame da consulta",
         examples=[
             OpenApiExample(
                 'Exemplo',
