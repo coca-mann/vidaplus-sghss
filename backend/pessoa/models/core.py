@@ -62,7 +62,7 @@ class Administrador(models.Model):
     )
 
     def __str__(self):
-        return f"{self.idPessoa.nome} {self.cargo} de {self.idLocal.nome}"
+        return f"{self.nome} {self.cargo} de {self.idLocal.nome}"
     
     
     class Meta:

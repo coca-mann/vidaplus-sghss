@@ -57,7 +57,8 @@ class Exame (models.Model):
     )
     resultadoExame = models.JSONField(
         blank=True,
-        verbose_name='Resultado do Exame'
+        verbose_name='Resultado do Exame',
+        null=True
     )
     status = models.CharField(
         max_length=10,
